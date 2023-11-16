@@ -1,5 +1,7 @@
 package com.example.restapi2.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.restapi2.models.User;
@@ -28,25 +32,45 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    /**
-     * Read - Get all users
-     * 
-     * @return - An Iterable object of Users
-     */
     @GetMapping("/users")
     public Iterable<User> getUsers() {
         return userService.getUsers();
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> getUserByEmail(@RequestBody String email) {
-        Optional<User> userOptional = userService.getUserByEmail(email);
-        if (userOptional.isPresent()) {
-            return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Can't find the requested User.", HttpStatus.NOT_FOUND);
-        }
+    @GetMapping("/test1")
+    public Optional<User> getString() {
+        Optional<User> user = userService.getUser(1L);
+        System.out.println(user);
+        return user;
     }
+
+    @GetMapping("/test2")
+    public Iterable<String> getString2() {
+        List<String> list = new ArrayList<>();
+        list.add("Volvo");
+        System.out.println(list);
+        return list;
+    }
+
+    /*
+     * RequestMapping("/test")
+     * public String getTest() {
+     * return "test";
+     * }
+     */
+
+    /*
+     * @PostMapping("/login")
+     * public ResponseEntity<?> getUserByEmail(@RequestBody String email) {
+     * Optional<User> userOptional = userService.getUserByEmail(email);
+     * if (userOptional.isPresent()) {
+     * return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
+     * } else {
+     * return new ResponseEntity<>("Can't find the requested User.",
+     * HttpStatus.NOT_FOUND);
+     * }
+     * }
+     */
 
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getUser(@PathVariable("id") final Long id) {

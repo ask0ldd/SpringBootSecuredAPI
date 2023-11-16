@@ -30,6 +30,12 @@ public class Restapi2Application implements CommandLineRunner {
 				passwordEncoder.encode("sophie")));
 		userService.saveUser(new User("Agathe", "FEELING", "agathefeeling@mail.com",
 				passwordEncoder.encode("agathe")));
+
+		/*
+		 * Iterable<User> users = userService.getUsers();
+		 * System.out.println(users);
+		 */
+
 	}
 
 }

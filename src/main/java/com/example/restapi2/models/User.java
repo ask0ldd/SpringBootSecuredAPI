@@ -58,6 +58,7 @@ public class User implements UserDetails {
         this.lastname = lastName;
         this.email = email;
         this.password = password;
+        this.role = Role.ADMIN; // si role undefined can't pass through spring security
     }
 
     @Enumerated(EnumType.STRING)
