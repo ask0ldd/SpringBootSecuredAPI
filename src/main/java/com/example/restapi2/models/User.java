@@ -58,11 +58,13 @@ public class User implements UserDetails {
         this.lastname = lastName;
         this.email = email;
         this.password = password;
-        this.role = Role.ADMIN; // si role undefined can't pass through spring security
+        this.role = Role.USER; // if role is not defined can't pass through spring security
     }
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    // methods that needs to be overriden to implements userDetails
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -94,3 +96,14 @@ public class User implements UserDetails {
         return true;
     }
 }
+
+/*
+ * 
+ * {"id":3,"firstname":"Agathe","lastname":"FEELING","email":
+ * "agathefeeling@mail.com","password":
+ * "$2a$10$ymf0tl2GnESWTAMY7.rocetvSQpAI9z1MZ.rpdwzhzKhMNT2YTTQS","role":"USER",
+ * "enabled":true,"username":"agathefeeling@mail.com","authorities":[{
+ * "authority":"USER"}],"credentialsNonExpired":true,"accountNonExpired":true,
+ * "accountNonLocked":true}]
+ * 
+ */

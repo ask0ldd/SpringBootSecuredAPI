@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.restapi2.models.User;
@@ -40,7 +38,6 @@ public class UserController {
     @GetMapping("/test1")
     public Optional<User> getString() {
         Optional<User> user = userService.getUser(1L);
-        System.out.println(user);
         return user;
     }
 
@@ -48,16 +45,8 @@ public class UserController {
     public Iterable<String> getString2() {
         List<String> list = new ArrayList<>();
         list.add("Volvo");
-        System.out.println(list);
         return list;
     }
-
-    /*
-     * RequestMapping("/test")
-     * public String getTest() {
-     * return "test";
-     * }
-     */
 
     /*
      * @PostMapping("/login")

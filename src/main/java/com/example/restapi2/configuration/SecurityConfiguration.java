@@ -23,7 +23,9 @@ public class SecurityConfiguration {
                             .requestMatchers(new AntPathRequestMatcher("/users**")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/users**", "GET")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/test**")).permitAll()
+                            .requestMatchers(new AntPathRequestMatcher("/h2**")).permitAll()
                             .anyRequest().authenticated();
+                    // .anyRequest().permitAll();
                 }).formLogin(Customizer.withDefaults()).build();
     }
 }
