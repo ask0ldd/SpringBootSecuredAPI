@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### Keys ###
-!**/src/main/**/ressources/certs
+src/main/ressources/certs
