@@ -33,8 +33,7 @@ public class SecurityConfiguration {
 
     @Bean
     JwtDecoder jwtDecoder() {
-        System.out.println(rsaKeys.rsaPublicKey());
-        return NimbusJwtDecoder.withPublicKey(rsaKeys.rsaPublicKey()).build(); // !!! return jwtdecoder
+        return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build(); // !!! return jwtdecoder
     }
 
     @Bean
