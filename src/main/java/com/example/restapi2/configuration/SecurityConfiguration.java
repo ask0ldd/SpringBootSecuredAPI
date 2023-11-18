@@ -33,6 +33,7 @@ public class SecurityConfiguration {
 
     @Bean
     JwtDecoder jwtDecoder() {
+        System.out.println(rsaKeys.rsaPublicKey());
         return NimbusJwtDecoder.withPublicKey(rsaKeys.rsaPublicKey()).build(); // !!! return jwtdecoder
     }
 
@@ -58,6 +59,7 @@ public class SecurityConfiguration {
         // html login
         // .formLogin(Customizer.withDefaults()).build();
     }
+
 }
 
 // MVC Request Matcher
