@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -16,11 +18,22 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    private final RsaKeyProperties rsaKeys;
+
+    public SecurityConfiguration(RsaKeyProperties rsaKeys) {
+        this.rsaKeys = rsaKeys;
+    }
+
     // Virtual userDetailsService
     @Bean
     public InMemoryUserDetailsManager user() {
         return new InMemoryUserDetailsManager(
                 User.withUsername("ced").password("{noop}ced123").authorities("read").roles("ADMIN").build());
+    }
+
+    @Bean
+    JwtDecoder jwtDecoder() {
+        return NimbusJwtDecoder.withPublicKey(rsaKeys.rsaPublicKey()).build(); // !!! return jwtdecoder
     }
 
     @Bean
