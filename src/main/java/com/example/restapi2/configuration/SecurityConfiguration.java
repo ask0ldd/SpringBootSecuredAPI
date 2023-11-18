@@ -61,6 +61,7 @@ public class SecurityConfiguration {
                             // .dispatcherTypeMatchers(DispatcherType.ERROR,
                             // DispatcherType.FORWARD).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/users**")).permitAll()
+                            .requestMatchers(new AntPathRequestMatcher("/token**")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/users**", "GET")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/test1**")).hasRole("ADMIN")
                             .requestMatchers(new AntPathRequestMatcher("/test2**")).hasRole("USER")

@@ -25,14 +25,23 @@ public class Restapi2Application implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		// BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+		/*
+		 * userService.saveUser(new User("Laurent", "GINA", "laurentgina@mail.com",
+		 * passwordEncoder.encode("laurent")));
+		 * userService.saveUser(new User("Sophie", "FONCEK", "sophiefoncek@mail.com",
+		 * passwordEncoder.encode("sophie")));
+		 * userService.saveUser(new User("Agathe", "FEELING", "agathefeeling@mail.com",
+		 * passwordEncoder.encode("agathe")));
+		 */
 
 		userService.saveUser(new User("Laurent", "GINA", "laurentgina@mail.com",
-				passwordEncoder.encode("laurent")));
+				"laurent"));
 		userService.saveUser(new User("Sophie", "FONCEK", "sophiefoncek@mail.com",
-				passwordEncoder.encode("sophie")));
+				"sophie"));
 		userService.saveUser(new User("Agathe", "FEELING", "agathefeeling@mail.com",
-				passwordEncoder.encode("agathe")));
+				"agathe"));
 
 		/*
 		 * Iterable<User> users = userService.getUsers();
