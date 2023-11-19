@@ -2,8 +2,12 @@ package com.example.restapi2.services;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.example.restapi2.models.Role;
 import com.example.restapi2.models.User;
 import com.example.restapi2.repositories.UserRepository;
 
@@ -16,7 +20,7 @@ import lombok.Data;
  * de @Component. Son rôle est donc le même, mais son nom a une valeur
  * sémantique pour ceux qui lisent votre code.
  */
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -40,6 +44,18 @@ public class UserService {
     public User saveUser(User user) {
         User savedUser = userRepository.save(user);
         return savedUser;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // return userRepository.findByEmail(username);
+
+        Optional<User> user = userRepository.findByEmail(username);
+        if (user.isPresent())
+            return new User("Agathe", "FEELING", "agathefeeling@mail.com",
+                    "agathe", Role.USER);
+
+        throw new UsernameNotFoundException("User not Found.");
     }
 
 }

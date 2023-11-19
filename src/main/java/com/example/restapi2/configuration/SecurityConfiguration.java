@@ -41,12 +41,14 @@ public class SecurityConfiguration {
     }
 
     // Virtual userDetailsService
-    @Bean
-    public InMemoryUserDetailsManager user() {
-        return new InMemoryUserDetailsManager(
-                User.withUsername("ced").password("{noop}ced123").authorities("read").roles(
-                        "ADMIN").build());
-    }
+    /*
+     * @Bean
+     * public InMemoryUserDetailsManager user() {
+     * return new InMemoryUserDetailsManager(
+     * User.withUsername("ced").password("{noop}ced123").authorities("read").roles(
+     * "ADMIN").build());
+     * }
+     */
 
     @Bean
     JwtDecoder jwtDecoder() {

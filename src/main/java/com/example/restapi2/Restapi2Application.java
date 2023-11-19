@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 // import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.restapi2.configuration.RsaKeyProperties;
 import com.example.restapi2.models.Role;
@@ -18,6 +19,9 @@ public class Restapi2Application implements CommandLineRunner {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Restapi2Application.class, args);
@@ -38,11 +42,11 @@ public class Restapi2Application implements CommandLineRunner {
 		 */
 
 		userService.saveUser(new User("Laurent", "GINA", "laurentgina@mail.com",
-				"laurent", Role.USER));
+				passwordEncoder.encode("laurent"), Role.USER));
 		userService.saveUser(new User("Sophie", "FONCEK", "sophiefoncek@mail.com",
-				"sophie", Role.USER));
+				passwordEncoder.encode("sophie"), Role.USER));
 		userService.saveUser(new User("Agathe", "FEELING", "agathefeeling@mail.com",
-				"agathe", Role.USER));
+				passwordEncoder.encode("agathe"), Role.USER));
 
 		/*
 		 * Iterable<User> users = userService.getUsers();
