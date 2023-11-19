@@ -25,7 +25,7 @@ public class AuthService {
 
         // !!! register user need frisntame / lastname / role to be added, take as
         // method parameters
-        return userRepository.save(new User("Temp", "Temp", username,
+        return userRepository.save(new User("temp", "temp", username,
                 encodedPassword, Role.ADMIN));
     }
 }
