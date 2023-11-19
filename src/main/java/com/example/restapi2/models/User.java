@@ -53,12 +53,12 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, String password) {
+    public User(String firstName, String lastName, String email, String password, Role role) {
         this.firstname = firstName;
         this.lastname = lastName;
         this.email = email;
         this.password = password;
-        this.role = Role.USER; // if role is not defined can't pass through spring security
+        this.role = role; // if role is not defined can't pass through spring security
     }
 
     @Enumerated(EnumType.STRING)
