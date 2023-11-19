@@ -49,6 +49,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // return userRepository.findByEmail(username);
+        System.out.println("\n\n***************loadUserByUsername***************\n\n");
 
         return userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not valid."));

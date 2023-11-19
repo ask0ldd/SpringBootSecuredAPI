@@ -42,7 +42,7 @@ public class Restapi2Application implements CommandLineRunner {
 		 */
 
 		userService.saveUser(new User("Laurent", "GINA", "laurentgina@mail.com",
-				passwordEncoder.encode("laurent"), Role.USER));
+				passwordEncoder.encode("laurent"), Role.ADMIN));
 		userService.saveUser(new User("Sophie", "FONCEK", "sophiefoncek@mail.com",
 				passwordEncoder.encode("sophie"), Role.USER));
 		userService.saveUser(new User("Agathe", "FEELING", "agathefeeling@mail.com",

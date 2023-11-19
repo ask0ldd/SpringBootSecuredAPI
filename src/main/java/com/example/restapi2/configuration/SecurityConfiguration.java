@@ -83,7 +83,7 @@ public class SecurityConfiguration {
                             // .dispatcherTypeMatchers(DispatcherType.ERROR,
                             // DispatcherType.FORWARD).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/users**")).permitAll()
-                            .requestMatchers(new AntPathRequestMatcher("/token**")).permitAll()
+                            // .requestMatchers(new AntPathRequestMatcher("/token**")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/users**", "GET")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/test1**")).hasRole("ADMIN")
                             .requestMatchers(new AntPathRequestMatcher("/test2**")).hasRole("USER")
@@ -106,3 +106,46 @@ public class SecurityConfiguration {
 // https://docs.spring.io/spring-security/reference/servlet/authorization/authorize-http-requests.html#authorize-requests
 // Basic Auth
 // https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/basic.html
+
+/*
+ * 
+ * @Configuration
+ * 
+ * @EnableWebSecurity
+ * public class SessionManagementSecurityConfig {
+ * 
+ * @Bean
+ * public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
+ * Exception {
+ * http
+ * .authorizeRequests((authorizeRequests) ->
+ * authorizeRequests
+ * .anyRequest().hasRole("USER")
+ * )
+ * .formLogin((formLogin) ->
+ * formLogin
+ * .permitAll()
+ * )
+ * .sessionManagement((sessionManagement) ->
+ * sessionManagement
+ * .sessionConcurrency((sessionConcurrency) ->
+ * sessionConcurrency
+ * .maximumSessions(1)
+ * .expiredUrl("/login?expired")
+ * )
+ * );
+ * return http.build();
+ * }
+ * 
+ * @Bean
+ * public UserDetailsService userDetailsService() {
+ * UserDetails user = User.withDefaultPasswordEncoder()
+ * .username("user")
+ * .password("password")
+ * .roles("USER")
+ * .build();
+ * return new InMemoryUserDetailsManager(user);
+ * }
+ * }
+ * 
+ */

@@ -43,7 +43,7 @@ public class User implements UserDetails {
     @Column(name = "last_name")
     private String lastname;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true) // !!! unique
     private String email;
 
     @Column(name = "password")
