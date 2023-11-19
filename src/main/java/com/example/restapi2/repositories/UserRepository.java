@@ -12,3 +12,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
     // custom query
     Optional<User> findByEmail(String email);
 }
+
+// JPA Queries :
+// https://docs.spring.io/spring-data/jpa/docs/1.5.0.RELEASE/reference/html/jpa.repositories.html

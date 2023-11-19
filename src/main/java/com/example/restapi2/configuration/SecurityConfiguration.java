@@ -25,6 +25,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 
 @Configuration
 @EnableWebSecurity
+// This publishes Spring Security’s default Filter chain as a @Bean
 public class SecurityConfiguration {
 
     private final RsaKeyProperties rsaKeys;
@@ -34,14 +35,12 @@ public class SecurityConfiguration {
     }
 
     // Virtual userDetailsService
-    /*
-     * @Bean
-     * public InMemoryUserDetailsManager user() {
-     * return new InMemoryUserDetailsManager(
-     * User.withUsername("ced").password("{noop}ced123").authorities("read").roles(
-     * "ADMIN").build());
-     * }
-     */
+    @Bean
+    public InMemoryUserDetailsManager user() {
+        return new InMemoryUserDetailsManager(
+                User.withUsername("ced").password("{noop}ced123").authorities("read").roles(
+                        "ADMIN").build());
+    }
 
     @Bean
     JwtDecoder jwtDecoder() {
