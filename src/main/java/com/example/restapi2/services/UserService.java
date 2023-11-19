@@ -50,12 +50,16 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // return userRepository.findByEmail(username);
 
-        Optional<User> user = userRepository.findByEmail(username);
-        if (user.isPresent())
-            return new User("Agathe", "FEELING", "agathefeeling@mail.com",
-                    "agathe", Role.USER);
+        return userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not valid."));
+        /*
+         * Optional<User> user = userRepository.findByEmail(username)
+         * if (user.isPresent())
+         * return new User("Agathe", "FEELING", "agathefeeling@mail.com",
+         * "agathe", Role.USER);
+         */
 
-        throw new UsernameNotFoundException("User not Found.");
+        // throw new UsernameNotFoundException("User not Found.");
     }
 
 }
