@@ -66,8 +66,10 @@ public class User implements UserDetails {
         this.authorities = authorities;
     }
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    /*
+     * @Enumerated(EnumType.STRING)
+     * private Role role;
+     */
 
     // methods that needs to be overriden to implements userDetails
 

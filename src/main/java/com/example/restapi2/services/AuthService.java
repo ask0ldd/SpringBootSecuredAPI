@@ -1,5 +1,8 @@
 package com.example.restapi2.services;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.restapi2.dto.LoginResponseDto;
 import com.example.restapi2.models.Role;
 import com.example.restapi2.models.User;
+import com.example.restapi2.repositories.RoleRepository;
 import com.example.restapi2.repositories.UserRepository;
 
 @Service
@@ -20,6 +24,9 @@ public class AuthService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -34,10 +41,12 @@ public class AuthService {
 
         String encodedPassword = passwordEncoder.encode(password);
 
-        // !!! register user need frisntame / lastname / role to be added, take as
-        // method parameters
+        Role userRole = roleRepository.findByAuthority("USER").get();
+        Set<Role> authorities = new HashSet<>();
+        authorities.add(userRole);
+
         return userRepository.save(new User("firstname", "lastname", username,
-                encodedPassword, Role.ADMIN));
+                encodedPassword, authorities));
     }
 
     public LoginResponseDto loginUser(String username, String password) {
