@@ -1,8 +1,10 @@
 package com.example.restapi2.models;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
@@ -37,7 +39,7 @@ public class User implements UserDetails {
     @Id
     /* GeneratedValue / Identity : autoincrement a number when id is missing */
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @Column(name = "first_name")
     private String firstname;
@@ -57,8 +59,10 @@ public class User implements UserDetails {
         authorities = new HashSet<>();
     }
 
-    public User(String firstName, String lastName, String email, String password, Set<Role> authorities) {
+    public User(Long userId, String firstName, String lastName, String email, String password,
+            Set<Role> authorities) {
         super();
+        this.userId = userId;
         this.firstname = firstName;
         this.lastname = lastName;
         this.email = email;
@@ -89,11 +93,45 @@ public class User implements UserDetails {
             @JoinColumn(name = "role_id") })
     private Set<Role> authorities;
 
+    public Long getUserId() {
+        return this.userId;
+    }
+
+    public void setId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setAuthorities(Set<Role> authorities) {
+        this.authorities = authorities;
+    }
+
     @Override
-    public String getUsername() { // identifiant login
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public String getUsername() {
         return this.email;
     }
 
+    public void setUsername(String username) {
+        this.email = username;
+    }
+
+    /*
+     * If you want account locking capabilities create variables and ways to set
+     * them for the methods below
+     */
     @Override
     public boolean isAccountNonExpired() {
         return true;
