@@ -88,7 +88,7 @@ public class SecurityConfiguration {
                             .requestMatchers(new AntPathRequestMatcher("/test1**")).hasRole("ADMIN")
                             .requestMatchers(new AntPathRequestMatcher("/test2**")).hasRole("USER")
                             .requestMatchers(new AntPathRequestMatcher("/h2-console/*")).permitAll()
-                            .requestMatchers(new AntPathRequestMatcher("/auth**/**", "POST")).permitAll()
+                            .requestMatchers(new AntPathRequestMatcher("/auth/*")).permitAll()
                             .anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)

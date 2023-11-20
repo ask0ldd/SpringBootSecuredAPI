@@ -36,15 +36,24 @@ public class AuthService {
 
         // !!! register user need frisntame / lastname / role to be added, take as
         // method parameters
-        return userRepository.save(new User("temp", "temp", username,
+        return userRepository.save(new User("firstname", "lastname", username,
                 encodedPassword, Role.ADMIN));
     }
 
     public LoginResponseDto loginUser(String username, String password) {
 
         try {
+            System.out.println("\n\n***************" + username + "***************\n\n");
+            System.out.println(
+                    "\n\n***************" + userRepository.findByEmail(username).get() + "***************\n\n");
+            System.out.println(
+                    "\n\n***************" + userRepository.findByEmail(username).get().getAuthorities()
+                            + "***************\n\n");
             Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            System.out.println("\n\n***************" + auth + "***************\n\n");
             String token = tokenService.generateJwt(auth);
+            System.out.println("\n\n***************" + token + "***************\n\n");
+
             return new LoginResponseDto(userRepository.findByEmail(username).get(), token);
         } catch (AuthenticationException e) {
             return new LoginResponseDto(null, ""); // maybe 40x error instead

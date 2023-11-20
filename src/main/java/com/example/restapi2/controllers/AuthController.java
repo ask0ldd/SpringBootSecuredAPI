@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.restapi2.dto.LoginResponseDto;
 import com.example.restapi2.dto.RegistrationDto;
 import com.example.restapi2.models.User;
 import com.example.restapi2.services.AuthService;
@@ -26,6 +27,11 @@ public class AuthController {
     @PostMapping("/register")
     public User userRegister(@RequestBody RegistrationDto body) {
         return authService.registerUser(body.getUsername(), body.getPassword());
+    }
+
+    @PostMapping("/login")
+    public LoginResponseDto userLogin(@RequestBody RegistrationDto body) {
+        return authService.loginUser(body.getUsername(), body.getPassword());
     }
 
     /*
