@@ -8,7 +8,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.restapi2.configuration.RsaKeyProperties;
@@ -37,24 +36,22 @@ public class Restapi2Application implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		// BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-		/*
-		 * userService.saveUser(new User("Laurent", "GINA", "laurentgina@mail.com",
-		 * passwordEncoder.encode("laurent")));
-		 * userService.saveUser(new User("Sophie", "FONCEK", "sophiefoncek@mail.com",
-		 * passwordEncoder.encode("sophie")));
-		 * userService.saveUser(new User("Agathe", "FEELING", "agathefeeling@mail.com",
-		 * passwordEncoder.encode("agathe")));
-		 */
+		// init role table
+		if (roleRepository.findByAuthority("ADMIN").isPresent())
+			return;
+		Role adminRole = roleRepository.save(new Role("ADMIN"));
+		roleRepository.save(new Role("USER"));
 
 		Role userRole = roleRepository.findByAuthority("USER").get();
 		Set<Role> userAuthority = new HashSet<>();
 		userAuthority.add(userRole);
 
-		Role adminRole = roleRepository.findByAuthority("ADMIN").get();
+		System.out.println("\n\n***************" + userRole + "***************\n\n");
+
 		Set<Role> adminAuthority = new HashSet<>();
-		adminAuthority.add(userRole);
+		adminAuthority.add(adminRole);
+
+		System.out.println("\n\n***************" + userRole + "***************\n\n");
 
 		userService.saveUser(new User("Laurent", "GINA", "laurentgina@mail.com",
 				passwordEncoder.encode("laurent"), adminAuthority));
