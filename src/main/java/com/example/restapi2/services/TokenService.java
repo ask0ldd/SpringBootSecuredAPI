@@ -20,12 +20,12 @@ public class TokenService {
         this.jwtEncoder = jwtEncoder;
     }
 
-    public String generateToken(Authentication authentication) {
+    public String generateToken(Authentication auth) {
         Instant now = Instant.now();
-        String scope = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(""));
+        String scope = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(" "));
         JwtClaimsSet claims = JwtClaimsSet.builder().issuer("self").issuedAt(now)
-                .expiresAt(now.plus(1, ChronoUnit.HOURS)).subject(authentication.getName()).claim("scope", scope)
+                .expiresAt(now.plus(1, ChronoUnit.HOURS)).subject(auth.getName()).claim("roles", scope)
                 .build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
