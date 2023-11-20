@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.example.restapi2.models.Role;
+// import com.example.restapi2.models.Role;
 import com.example.restapi2.models.User;
 import com.example.restapi2.repositories.UserRepository;
 

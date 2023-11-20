@@ -87,14 +87,17 @@ public class SecurityConfiguration {
                             .requestMatchers(new AntPathRequestMatcher("/users**", "GET")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/test1**")).hasRole("ADMIN")
                             .requestMatchers(new AntPathRequestMatcher("/test2**")).hasRole("USER")
-                            .requestMatchers(new AntPathRequestMatcher("/h2**")).permitAll()
+                            .requestMatchers(new AntPathRequestMatcher("/h2-console/*")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/auth**/**", "POST")).permitAll()
                             .anyRequest().authenticated();
-                    // .anyRequest().permitAll();
-                }).oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                })
+                // .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+                // .sessionManagement(session ->
+                // session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // basic popup login form
-                .httpBasic(Customizer.withDefaults()).build();
+                .httpBasic(Customizer.withDefaults())
+                .headers(headers -> headers.frameOptions().disable()) // allows h2-console frames
+                .build();
         // html login
         // .formLogin(Customizer.withDefaults()).build();
     }
