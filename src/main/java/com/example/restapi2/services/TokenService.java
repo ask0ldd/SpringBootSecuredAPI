@@ -20,7 +20,7 @@ public class TokenService {
         this.jwtEncoder = jwtEncoder;
     }
 
-    public String generateToken(Authentication auth) {
+    public String generateJwt(Authentication auth) {
         Instant now = Instant.now();
         String scope = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
