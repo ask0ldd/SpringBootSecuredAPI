@@ -41,27 +41,27 @@ public class AuthService {
 
         String encodedPassword = passwordEncoder.encode(password);
 
-        Role userRole = roleRepository.findByAuthority("USER").get();
+        Role userRole = roleRepository.findByAuthority("ROLE_USER").get();
         Set<Role> authorities = new HashSet<>();
         authorities.add(userRole);
 
-        return userRepository.save(new User("firstname", "lastname", username,
+        return userRepository.save(new User(null, "firstname", "lastname", username,
                 encodedPassword, authorities));
     }
 
     public LoginResponseDto loginUser(String username, String password) {
 
         try {
+
             System.out.println("\n\n***************" + username + "***************\n\n");
             System.out.println(
                     "\n\n***************" + userRepository.findByEmail(username).get() + "***************\n\n");
             System.out.println(
                     "\n\n***************" + userRepository.findByEmail(username).get().getAuthorities()
                             + "***************\n\n");
+
             Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-            System.out.println("\n\n***************" + auth + "***************\n\n");
             String token = tokenService.generateJwt(auth);
-            System.out.println("\n\n***************" + token + "***************\n\n");
 
             return new LoginResponseDto(userRepository.findByEmail(username).get(), token);
         } catch (AuthenticationException e) {

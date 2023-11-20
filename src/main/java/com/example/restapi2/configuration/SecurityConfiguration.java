@@ -85,14 +85,18 @@ public class SecurityConfiguration {
                             .requestMatchers(new AntPathRequestMatcher("/users**")).permitAll()
                             // .requestMatchers(new AntPathRequestMatcher("/token**")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/users**", "GET")).permitAll()
-                            .requestMatchers(new AntPathRequestMatcher("/test1**")).hasRole("ADMIN")
-                            .requestMatchers(new AntPathRequestMatcher("/test2**")).hasRole("USER")
-                            .requestMatchers(new AntPathRequestMatcher("/h2-console/*")).permitAll()
+                            .requestMatchers(new AntPathRequestMatcher("/test1")).hasRole("ADMIN")
+                            .requestMatchers(new AntPathRequestMatcher("/test2")).hasRole("USER")
+                            .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/auth/*")).permitAll()
+                            .requestMatchers(new AntPathRequestMatcher("/auth/login")).permitAll()
                             .anyRequest().authenticated();
                 })
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                /*
+                 * .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+                 * .sessionManagement(session ->
+                 * session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                 */
                 // basic popup login form
                 .httpBasic(Customizer.withDefaults())
                 .headers(headers -> headers.frameOptions().disable()) // allows h2-console frames to be displayed

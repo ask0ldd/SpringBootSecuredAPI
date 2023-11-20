@@ -37,27 +37,27 @@ public class Restapi2Application implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 		// init role table
-		if (roleRepository.findByAuthority("ADMIN").isPresent())
+		if (roleRepository.findByAuthority("ROLE_ADMIN").isPresent())
 			return;
-		Role adminRole = roleRepository.save(new Role("ADMIN"));
-		roleRepository.save(new Role("USER"));
+		Role adminRole = roleRepository.save(new Role("ROLE_ADMIN"));
+		roleRepository.save(new Role("ROLE_USER"));
 
-		Role userRole = roleRepository.findByAuthority("USER").get();
+		Role userRole = roleRepository.findByAuthority("ROLE_USER").get();
 		Set<Role> userAuthority = new HashSet<>();
 		userAuthority.add(userRole);
 
-		System.out.println("\n\n***************" + userRole + "***************\n\n");
+		System.out.println("\n\n***************" + userRole.getAuthority() + "***************\n\n");
 
 		Set<Role> adminAuthority = new HashSet<>();
 		adminAuthority.add(adminRole);
 
-		System.out.println("\n\n***************" + userRole + "***************\n\n");
+		System.out.println("\n\n***************" + adminRole.getAuthority() + "***************\n\n");
 
-		userService.saveUser(new User("Laurent", "GINA", "laurentgina@mail.com",
+		userService.saveUser(new User(null, "Laurent", "GINA", "laurentgina@mail.com",
 				passwordEncoder.encode("laurent"), adminAuthority));
-		userService.saveUser(new User("Sophie", "FONCEK", "sophiefoncek@mail.com",
+		userService.saveUser(new User(null, "Sophie", "FONCEK", "sophiefoncek@mail.com",
 				passwordEncoder.encode("sophie"), userAuthority));
-		userService.saveUser(new User("Agathe", "FEELING", "agathefeeling@mail.com",
+		userService.saveUser(new User(null, "Agathe", "FEELING", "agathefeeling@mail.com",
 				passwordEncoder.encode("agathe"), userAuthority));
 
 		/*

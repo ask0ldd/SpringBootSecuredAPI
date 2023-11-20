@@ -32,13 +32,14 @@ import lombok.Data;
  * @Entity est une annotation qui indique que la classe correspond à une table
  * de la base de données.
  */
-@Table(name = "admins")
+@Table(name = "utilisateurs")
 /* spring security needs some UserDetails methods to be implemented */
 public class User implements UserDetails {
 
     @Id
     /* GeneratedValue / Identity : autoincrement a number when id is missing */
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long userId;
 
     @Column(name = "first_name")
@@ -89,7 +90,7 @@ public class User implements UserDetails {
      */
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role_junction", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+    @JoinTable(name = "users_roles_junction", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
             @JoinColumn(name = "role_id") })
     private Set<Role> authorities;
 
