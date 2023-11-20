@@ -31,6 +31,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public LoginResponseDto userLogin(@RequestBody RegistrationDto body) {
+        System.out.println("********************* LOGIN ***************************");
         return authService.loginUser(body.getUsername(), body.getPassword());
     }
 
