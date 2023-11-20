@@ -37,12 +37,12 @@ public class Restapi2Application implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 		// init role table
-		if (roleRepository.findByAuthority("ROLE_ADMIN").isPresent())
+		if (roleRepository.findByAuthority("ADMIN").isPresent())
 			return;
-		Role adminRole = roleRepository.save(new Role("ROLE_ADMIN"));
-		roleRepository.save(new Role("ROLE_USER"));
+		Role adminRole = roleRepository.save(new Role("ADMIN"));
+		roleRepository.save(new Role("USER"));
 
-		Role userRole = roleRepository.findByAuthority("ROLE_USER").get();
+		Role userRole = roleRepository.findByAuthority("USER").get();
 		Set<Role> userAuthority = new HashSet<>();
 		userAuthority.add(userRole);
 

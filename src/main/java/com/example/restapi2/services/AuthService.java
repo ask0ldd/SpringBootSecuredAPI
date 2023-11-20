@@ -41,7 +41,7 @@ public class AuthService {
 
         String encodedPassword = passwordEncoder.encode(password);
 
-        Role userRole = roleRepository.findByAuthority("ROLE_USER").get();
+        Role userRole = roleRepository.findByAuthority("USER").get();
         Set<Role> authorities = new HashSet<>();
         authorities.add(userRole);
 
@@ -53,9 +53,6 @@ public class AuthService {
 
         try {
 
-            System.out.println("\n\n***************" + username + "***************\n\n");
-            System.out.println(
-                    "\n\n***************" + userRepository.findByEmail(username).get() + "***************\n\n");
             System.out.println(
                     "\n\n***************" + userRepository.findByEmail(username).get().getAuthorities()
                             + "***************\n\n");
