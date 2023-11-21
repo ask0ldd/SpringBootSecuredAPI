@@ -5,10 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,7 +29,6 @@ import com.nimbusds.jose.proc.SecurityContext;
 
 @Configuration
 @EnableWebSecurity
-// This publishes Spring Security’s default Filter chain as a @Bean
 public class SecurityConfiguration {
 
     private final RsaKeyProperties rsaKeys;
@@ -42,7 +39,7 @@ public class SecurityConfiguration {
 
     @Bean
     JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build(); // !!! return jwtdecoder
+        return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
     }
 
     @Bean
@@ -73,14 +70,11 @@ public class SecurityConfiguration {
                     authorize
                             // .dispatcherTypeMatchers(DispatcherType.ERROR,
                             // DispatcherType.FORWARD).permitAll()
-                            /*
-                             * .requestMatchers(new AntPathRequestMatcher("/users**")).permitAll()
-                             * .requestMatchers(new AntPathRequestMatcher("/users**", "GET")).permitAll()
-                             */
                             .requestMatchers(new AntPathRequestMatcher("/test1")).hasRole("ADMIN")
                             .requestMatchers(new AntPathRequestMatcher("/test2")).hasRole("USER")
                             .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/auth/*")).permitAll()
+                            // .requestMatchers(new AntPathRequestMatcher("/users")).permitAll()
                             .anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(
@@ -142,19 +136,6 @@ public class SecurityConfiguration {
  * );
  * return http.build();
  * }
- * 
- * @Bean
- * public UserDetailsService userDetailsService() {
- * UserDetails user = User.withDefaultPasswordEncoder()
- * .username("user")
- * .password("password")
- * .roles("USER")
- * .build();
- * return new InMemoryUserDetailsManager(user);
- * }
- * }
- * 
  */
-
 // basic popup login form
 // .httpBasic(Customizer.withDefaults())

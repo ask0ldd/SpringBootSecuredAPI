@@ -22,7 +22,8 @@ public class TokenService {
 
     public String generateJwt(Authentication auth) {
 
-        System.out.println("********generatejwt*******" + auth.getName() + "******************************");
+        // System.out.println("********generatejwt*******" + auth.getName() +
+        // "******************************");
 
         Instant now = Instant.now();
 

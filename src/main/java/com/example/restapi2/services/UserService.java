@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-// import com.example.restapi2.models.Role;
 import com.example.restapi2.models.User;
 import com.example.restapi2.repositories.UserRepository;
 
@@ -48,19 +47,10 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // return userRepository.findByEmail(username);
-        System.out.println("\n\n***************loadUserByUsername***************\n\n");
 
         return userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not valid."));
-        /*
-         * Optional<User> user = userRepository.findByEmail(username)
-         * if (user.isPresent())
-         * return new User("Agathe", "FEELING", "agathefeeling@mail.com",
-         * "agathe", Role.USER);
-         */
 
-        // throw new UsernameNotFoundException("User not Found.");
     }
 
 }

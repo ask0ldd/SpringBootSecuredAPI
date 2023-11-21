@@ -53,9 +53,9 @@ public class AuthService {
 
         try {
 
-            System.out.println(
-                    "\n\n***************" + userRepository.findByEmail(username).get().getAuthorities()
-                            + "***************\n\n");
+            // System.out.println("\n\n***************" +
+            // userRepository.findByEmail(username).get().getAuthorities() +
+            // "***************\n\n");
 
             Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             String token = tokenService.generateJwt(auth);

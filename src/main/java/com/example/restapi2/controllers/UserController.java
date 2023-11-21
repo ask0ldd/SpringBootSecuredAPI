@@ -48,19 +48,6 @@ public class UserController {
         return list;
     }
 
-    /*
-     * @PostMapping("/login")
-     * public ResponseEntity<?> getUserByEmail(@RequestBody String email) {
-     * Optional<User> userOptional = userService.getUserByEmail(email);
-     * if (userOptional.isPresent()) {
-     * return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
-     * } else {
-     * return new ResponseEntity<>("Can't find the requested User.",
-     * HttpStatus.NOT_FOUND);
-     * }
-     * }
-     */
-
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getUser(@PathVariable("id") final Long id) {
         Optional<User> userOptional = userService.getUser(id);
@@ -115,3 +102,16 @@ public class UserController {
     }
 
 }
+
+/*
+ * @PostMapping("/login")
+ * public ResponseEntity<?> getUserByEmail(@RequestBody String email) {
+ * Optional<User> userOptional = userService.getUserByEmail(email);
+ * if (userOptional.isPresent()) {
+ * return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
+ * } else {
+ * return new ResponseEntity<>("Can't find the requested User.",
+ * HttpStatus.NOT_FOUND);
+ * }
+ * }
+ */
