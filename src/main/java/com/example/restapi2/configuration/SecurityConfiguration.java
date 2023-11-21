@@ -71,19 +71,23 @@ public class SecurityConfiguration {
                     authorize
                             // .dispatcherTypeMatchers(DispatcherType.ERROR,
                             // DispatcherType.FORWARD).permitAll()
-                            .requestMatchers(new AntPathRequestMatcher("/users**")).permitAll()
-                            .requestMatchers(new AntPathRequestMatcher("/users**", "GET")).permitAll()
+                            /*
+                             * .requestMatchers(new AntPathRequestMatcher("/users**")).permitAll()
+                             * .requestMatchers(new AntPathRequestMatcher("/users**", "GET")).permitAll()
+                             */
                             .requestMatchers(new AntPathRequestMatcher("/test1")).hasAuthority("ADMIN")
                             .requestMatchers(new AntPathRequestMatcher("/test2")).hasAuthority("USER")
                             .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/auth/*")).permitAll()
                             .anyRequest().authenticated();
                 })
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+                .oauth2ResourceServer(
+                        oauth2ResourceServer -> oauth2ResourceServer.jwt(jwt -> jwt.decoder(jwtDecoder())))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // basic popup login form
-                .httpBasic(Customizer.withDefaults())
-                .headers(headers -> headers.frameOptions().disable()) // allows h2-console frames to be displayed
+                // .httpBasic(Customizer.withDefaults())
+                // allows h2-console frames to be displayed
+                .headers(headers -> headers.frameOptions(frame -> frame.disable())/* .disable() */)
                 .build();
         // html login
         // .formLogin(Customizer.withDefaults()).build();
@@ -139,4 +143,14 @@ public class SecurityConfiguration {
  * }
  * }
  * 
+ */
+
+/*
+ * 
+ * (oauth2ResourceServer) ->
+ * oauth2ResourceServer
+ * .jwt((jwt) ->
+ * jwt
+ * .decoder(jwtDecoder())
+ * )
  */

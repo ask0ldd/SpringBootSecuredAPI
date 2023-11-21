@@ -21,12 +21,22 @@ public class TokenService {
     }
 
     public String generateJwt(Authentication auth) {
+
+        System.out.println("********generatejwt*******" + auth.getName() + "******************************");
+
         Instant now = Instant.now();
-        String scope = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+
+        String scope = auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
-        JwtClaimsSet claims = JwtClaimsSet.builder().issuer("self").issuedAt(now)
-                .expiresAt(now.plus(1, ChronoUnit.HOURS)).subject(auth.getName()).claim("roles", scope)
+
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuer("self")
+                .issuedAt(now)
+                .subject(auth.getName())
+                .claim("roles", scope)
                 .build();
-        return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+
+        return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 }
