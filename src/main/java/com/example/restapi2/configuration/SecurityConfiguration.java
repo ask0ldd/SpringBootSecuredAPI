@@ -17,6 +17,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -75,22 +77,31 @@ public class SecurityConfiguration {
                              * .requestMatchers(new AntPathRequestMatcher("/users**")).permitAll()
                              * .requestMatchers(new AntPathRequestMatcher("/users**", "GET")).permitAll()
                              */
-                            .requestMatchers(new AntPathRequestMatcher("/test1")).hasAuthority("ADMIN")
-                            .requestMatchers(new AntPathRequestMatcher("/test2")).hasAuthority("USER")
+                            .requestMatchers(new AntPathRequestMatcher("/test1")).hasRole("ADMIN")
+                            .requestMatchers(new AntPathRequestMatcher("/test2")).hasRole("USER")
                             .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/auth/*")).permitAll()
                             .anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(
-                        oauth2ResourceServer -> oauth2ResourceServer.jwt(jwt -> jwt.decoder(jwtDecoder())))
+                        oauth2ResourceServer -> oauth2ResourceServer.jwt(jwt -> jwt.decoder(jwtDecoder())
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // basic popup login form
-                // .httpBasic(Customizer.withDefaults())
                 // allows h2-console frames to be displayed
                 .headers(headers -> headers.frameOptions(frame -> frame.disable())/* .disable() */)
                 .build();
         // html login
         // .formLogin(Customizer.withDefaults()).build();
+    }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+        JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
+        jwtConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+        return jwtConverter;
     }
 
 }
@@ -145,12 +156,5 @@ public class SecurityConfiguration {
  * 
  */
 
-/*
- * 
- * (oauth2ResourceServer) ->
- * oauth2ResourceServer
- * .jwt((jwt) ->
- * jwt
- * .decoder(jwtDecoder())
- * )
- */
+// basic popup login form
+// .httpBasic(Customizer.withDefaults())
