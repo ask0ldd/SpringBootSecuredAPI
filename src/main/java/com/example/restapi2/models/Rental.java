@@ -16,7 +16,8 @@ import lombok.Data;
 public class Rental {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "rental_id")
+    private Long rentalId;
 
     @Column(name = "owner")
     private Integer owner;

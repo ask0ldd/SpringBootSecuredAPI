@@ -17,7 +17,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-// import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -57,9 +56,9 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public AuthenticationManager authManager(UserDetailsService detailsService) {
+    public AuthenticationManager authManager(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
-        daoProvider.setUserDetailsService(detailsService);
+        daoProvider.setUserDetailsService(userDetailsService);
         daoProvider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(daoProvider);
     }

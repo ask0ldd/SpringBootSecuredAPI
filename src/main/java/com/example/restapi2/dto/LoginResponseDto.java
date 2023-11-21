@@ -16,7 +16,10 @@ public class LoginResponseDto {
     }
 
     public User getUser() {
-        return this.user;
+        // get rid password
+        User user = this.user;
+        user.setPassword(null);
+        return user;
     }
 
     public String getJwt() {
