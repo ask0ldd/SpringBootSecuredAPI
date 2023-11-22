@@ -9,6 +9,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(classes = Restapi2ApplicationTests.class)
+// !!!!! creates a profile so we can ignore specific parts of the main app when
+// init for context
 @ActiveProfiles("test")
 class Restapi2ApplicationTests {
 
