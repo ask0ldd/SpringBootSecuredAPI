@@ -31,7 +31,7 @@ import lombok.Data;
  * @Entity est une annotation qui indique que la classe correspond à une table
  * de la base de données.
  */
-// @Builder // so we can build a new user in our tests
+@Builder // so we can build a new user in our tests
 @Table(name = "utilisateurs")
 /* spring security needs some UserDetails methods to be implemented */
 public class User implements UserDetails {
