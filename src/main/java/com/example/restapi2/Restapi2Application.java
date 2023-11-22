@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.restapi2.configuration.RsaKeyProperties;
@@ -34,6 +35,7 @@ public class Restapi2Application implements CommandLineRunner {
 	}
 
 	@Override
+	@Profile("!test") // ignore when testing
 	public void run(String... args) throws Exception {
 
 		// init role table

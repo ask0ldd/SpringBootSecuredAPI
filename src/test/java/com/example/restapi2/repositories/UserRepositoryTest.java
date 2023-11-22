@@ -10,11 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.restapi2.models.User;
+import com.example.restapi2.repositories.UserRepository;
 import com.example.restapi2.models.Role;
 
-@DataJpaTest
+// indicates which class to load the context from
+@SpringBootTest(classes = { com.example.restapi2.Restapi2Application.class })
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class UserRepositoryTest {
 
@@ -31,6 +34,7 @@ public class UserRepositoryTest {
         Optional<User> collectedUser = userRepository.findById(1L);
 
         Assertions.assertThat(collectedUser.get()).isNotNull();
+        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo("email@domain.com");
     }
 }
 
