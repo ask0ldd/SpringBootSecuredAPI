@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -65,7 +66,8 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable())
+                // https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
                     authorize
                             // .dispatcherTypeMatchers(DispatcherType.ERROR,
@@ -74,7 +76,7 @@ public class SecurityConfiguration {
                             .requestMatchers(new AntPathRequestMatcher("/test2")).hasRole("USER")
                             .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/auth/*")).permitAll()
-                            // .requestMatchers(new AntPathRequestMatcher("/users")).permitAll()
+                            .requestMatchers(new AntPathRequestMatcher("/users2")).permitAll()
                             .anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(

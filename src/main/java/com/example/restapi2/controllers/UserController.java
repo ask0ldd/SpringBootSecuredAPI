@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.restapi2.models.User;
@@ -21,7 +22,8 @@ import com.example.restapi2.services.UserService;
 import com.example.restapi2.services.ValidationService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*", allowedHeaders = "Authorization", methods = {
+        RequestMethod.GET, RequestMethod.OPTIONS, RequestMethod.POST })
 public class UserController {
 
     @Autowired
@@ -31,7 +33,14 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/users")
+    // public ResponseEntity<?> getUsers() {
     public Iterable<User> getUsers() {
+        return userService.getUsers();
+        // return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK, headers.);
+    }
+
+    @GetMapping("/users2")
+    public Iterable<User> getUsers2() {
         return userService.getUsers();
     }
 
