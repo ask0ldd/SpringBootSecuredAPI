@@ -3,6 +3,7 @@ package com.example.restapi2.repositories;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class UserRepositoryTest {
                 typedSet);
         userRepository.save(user);
         Optional<User> collectedUser = userRepository.findById(1L);
+
+        Assertions.assertThat(collectedUser.get()).isNotNull();
     }
 }
 
