@@ -30,6 +30,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    // @GetMapping(value = "/users", produces = "application/json", consumes =
+    // "application/json")
     @GetMapping("/users")
     public Iterable<User> getUsers() {
         return userService.getUsers();

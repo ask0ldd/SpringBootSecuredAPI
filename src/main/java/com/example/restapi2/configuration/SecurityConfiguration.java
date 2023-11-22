@@ -68,6 +68,8 @@ public class SecurityConfiguration {
         return http.csrf(csrf -> csrf.disable())
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
                 .cors(Customizer.withDefaults())
+                // .headers(header -> header.contentTypeOptions(null))
+                // .headers(header -> header.contentTypeOptions())
                 .authorizeHttpRequests(authorize -> {
                     authorize
                             // .dispatcherTypeMatchers(DispatcherType.ERROR,

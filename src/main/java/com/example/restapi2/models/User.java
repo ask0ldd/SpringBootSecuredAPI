@@ -17,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -30,6 +31,7 @@ import lombok.Data;
  * @Entity est une annotation qui indique que la classe correspond à une table
  * de la base de données.
  */
+// @Builder // so we can build a new user in our tests
 @Table(name = "utilisateurs")
 /* spring security needs some UserDetails methods to be implemented */
 public class User implements UserDetails {
