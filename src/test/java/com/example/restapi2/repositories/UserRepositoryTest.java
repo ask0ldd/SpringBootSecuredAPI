@@ -29,7 +29,7 @@ public class UserRepositoryTest {
     private UserRepository userRepository;
 
     @Test
-    public void SaveUser_ReturnSavedUserInDB() {
+    public void SaveUser_ReturnSavedUserFromB() {
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(new Role(1, "ADMIN"));
         User user = new User(1L, "firstname", "lastname", "email@domain.com", "randomPassword",
