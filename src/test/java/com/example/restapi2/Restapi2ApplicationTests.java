@@ -1,7 +1,5 @@
 package com.example.restapi2;
 
-import static org.junit.Assert.assertThat;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

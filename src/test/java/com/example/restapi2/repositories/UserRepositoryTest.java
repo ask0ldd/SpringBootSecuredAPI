@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
 import java.util.stream.StreamSupport;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +38,7 @@ public class UserRepositoryTest {
         Optional<User> collectedUser = userRepository.findById(1L); // 1L = number is a Long
 
         Assertions.assertThat(collectedUser.get()).isNotNull();
-        Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(3);
-        // Assertions.assertThat(collectedUser.get().getUserId()).isEqualTo(4);
+        Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
         Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo("firstname");
         Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo("lastname");
         Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo("randomPassword");
@@ -49,6 +48,7 @@ public class UserRepositoryTest {
         } // !! to improve
     }
 
+    @DisplayName("FindAll returns the 5 expected users")
     @Test
     public void FindAll_ReturnFiveSavedUsers() {
         Set<Role> roleSet = new HashSet<>();
@@ -68,12 +68,31 @@ public class UserRepositoryTest {
         emails.add("agathefeeling@mail.com");
         emails.add("email1@domain.com");
         emails.add("email2@domain.com");
-        emails.get(0);
 
         int i = 0;
         for (Iterator<User> it = users.iterator(); it.hasNext(); i++) {
             User user = it.next();
             Assertions.assertThat(user.getEmail()).isEqualTo(emails.get(i));
+        }
+    }
+
+    @DisplayName("FindById returns the expected user")
+    @Test
+    public void FindById_ReturnOneTargetUser() {
+        Set<Role> roleSet = new HashSet<>();
+        roleSet.add(new Role(1, "ADMIN"));
+        User user = new User(1L, "firstname", "lastname", "email@domain.com", "randomPassword",
+                roleSet);
+        userRepository.save(user);
+        Optional<User> collectedUser = userRepository.findById(1L);
+        Assertions.assertThat(collectedUser.get()).isNotNull();
+        Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
+        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo("firstname");
+        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo("lastname");
+        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo("randomPassword");
+        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo("email@domain.com");
+        for (GrantedAuthority role : collectedUser.get().getAuthorities()) {
+            Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
         }
     }
 

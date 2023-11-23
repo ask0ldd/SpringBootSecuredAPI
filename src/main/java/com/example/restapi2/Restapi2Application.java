@@ -8,7 +8,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.restapi2.configuration.RsaKeyProperties;
@@ -47,25 +46,26 @@ public class Restapi2Application implements CommandLineRunner {
 		Set<Role> userAuthority = new HashSet<>();
 		userAuthority.add(userRole);
 
-		System.out.println("\n\n***************" + userRole.getAuthority() + "***************\n\n");
+		// System.out.println("\n\n***************" + userRole.getAuthority() +
+		// "***************\n\n");
 
 		Set<Role> adminAuthority = new HashSet<>();
 		adminAuthority.add(adminRole);
 
-		System.out.println("\n\n***************" + adminRole.getAuthority() + "***************\n\n");
+		// System.out.println("\n\n***************" + adminRole.getAuthority() +
+		// "***************\n\n");
 
+		this.createBaseUsers(adminAuthority, userAuthority);
+
+	}
+
+	private void createBaseUsers(Set<Role> adminAuthority, Set<Role> userAuthority) {
 		userService.saveUser(new User(null, "Laurent", "GINA", "laurentgina@mail.com",
 				passwordEncoder.encode("laurent"), adminAuthority));
 		userService.saveUser(new User(null, "Sophie", "FONCEK", "sophiefoncek@mail.com",
 				passwordEncoder.encode("sophie"), userAuthority));
 		userService.saveUser(new User(null, "Agathe", "FEELING", "agathefeeling@mail.com",
 				passwordEncoder.encode("agathe"), userAuthority));
-
-		/*
-		 * Iterable<User> users = userService.getUsers();
-		 * System.out.println(users);
-		 */
-
 	}
 
 }
