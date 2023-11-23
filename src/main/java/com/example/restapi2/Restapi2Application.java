@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.restapi2.configuration.RsaKeyProperties;
 import com.example.restapi2.models.Role;
 import com.example.restapi2.models.User;
-import com.example.restapi2.repositories.MessageRepository;
 import com.example.restapi2.repositories.RoleRepository;
 import com.example.restapi2.services.UserService;
 

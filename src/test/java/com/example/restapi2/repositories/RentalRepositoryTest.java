@@ -20,8 +20,9 @@ public class RentalRepositoryTest {
 
     @Test
     public void SaveRental_ReturnSavedRentalFromDB() {
-        Rental rental = new Rental(1L, 1L, "rental name", "rental description", "picture url", 30, 300F, new Date(),
-                new Date());
+        Date date = new Date();
+        Rental rental = new Rental(1L, 1L, "rental name", "rental description", "picture url", 30, 300F, date,
+                date);
 
         rentalRepository.save(rental);
 
@@ -29,5 +30,16 @@ public class RentalRepositoryTest {
 
         Assertions.assertThat(collectedMessage.get()).isNotNull();
         Assertions.assertThat(collectedMessage.get().getRentalId()).isGreaterThan(0);
+        Assertions.assertThat(collectedMessage.get().getRentalId()).isEqualTo(1L);
+        Assertions.assertThat(collectedMessage.get().getOwner()).isEqualTo(1L);
+        Assertions.assertThat(collectedMessage.get().getName()).isEqualTo("rental name");
+        Assertions.assertThat(collectedMessage.get().getDescription()).isEqualTo("rental description");
+        Assertions.assertThat(collectedMessage.get().getPicture()).isEqualTo("picture url");
+        Assertions.assertThat(collectedMessage.get().getSurface()).isEqualTo(30);
+        Assertions.assertThat(collectedMessage.get().getPrice()).isEqualTo(300F);
+        /*
+         * Assertions.assertThat(collectedMessage.get().getCreation()).isEqualTo(date);
+         * Assertions.assertThat(collectedMessage.get().getUpdate()).isEqualTo(date);
+         */
     }
 }
