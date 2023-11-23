@@ -28,6 +28,7 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+    @DisplayName("Save() saves one User into DB.")
     @Test
     public void SaveUser_ReturnSavedUserFromDB() {
         Set<Role> roleSet = new HashSet<>();
@@ -48,7 +49,7 @@ public class UserRepositoryTest {
         } // !! to improve
     }
 
-    @DisplayName("FindAll returns the 5 expected users")
+    @DisplayName("FindAll() returns the 5 expected Users")
     @Test
     public void FindAll_ReturnFiveSavedUsers() {
         Set<Role> roleSet = new HashSet<>();
@@ -76,7 +77,7 @@ public class UserRepositoryTest {
         }
     }
 
-    @DisplayName("FindById returns the expected user")
+    @DisplayName("FindById() returns the expected user")
     @Test
     public void FindById_ReturnOneTargetUser() {
         Set<Role> roleSet = new HashSet<>();
