@@ -35,7 +35,6 @@ public class Restapi2Application implements CommandLineRunner {
 	}
 
 	@Override
-	// @Profile("!test") // ignore when testing
 	public void run(String... args) throws Exception {
 
 		// init role table
