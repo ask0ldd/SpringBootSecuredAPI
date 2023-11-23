@@ -7,18 +7,20 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Data
-@Entity
-@Table(name = "messages")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Data
+@Entity
+@Builder
+@Table(name = "messages")
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,5 +35,14 @@ public class Message {
 
     @Column(name = "body")
     private String body;
+
+    /*
+     * public Message(Long messageId, Long sender, Long recipient, String body) {
+     * this.messageId = messageId;
+     * this.sender = sender;
+     * this.recipient = recipient;
+     * this.body = body;
+     * }
+     */
 
 }
