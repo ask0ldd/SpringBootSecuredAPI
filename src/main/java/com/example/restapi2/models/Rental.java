@@ -28,7 +28,7 @@ public class Rental {
     private Long rentalId;
 
     @Column(name = "owner")
-    private Integer owner;
+    private Long owner;
 
     @Column(name = "name")
     private String name;

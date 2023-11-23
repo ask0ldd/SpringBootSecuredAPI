@@ -2,9 +2,7 @@ package com.example.restapi2.repositories;
 
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
