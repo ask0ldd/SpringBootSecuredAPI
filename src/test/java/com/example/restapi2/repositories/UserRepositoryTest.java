@@ -28,22 +28,28 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+    private final Set<Role> roleSet = Set.of(new Role(1, "ADMIN"));
+
+    private final User user1 = new User(null, "firstname1", "lastname1", "email1@domain.com", "randomPassword1",
+            roleSet);
+
+    private final User user2 = new User(null, "firstname2", "lastname2", "email2@domain.com", "randomPassword2",
+            roleSet);
+
     @DisplayName("Save() saves one User into DB.")
     @Test
     public void SaveUser_ReturnSavedUserFromDB() {
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(new Role(1, "ADMIN"));
-        User user = new User(1L, "firstname", "lastname", "email@domain.com", "randomPassword",
-                roleSet);
-        userRepository.save(user);
-        Optional<User> collectedUser = userRepository.findById(1L); // 1L = number is a Long
+
+        userRepository.save(user1);
+        // 4L since 3 users are created when initializing the context
+        Optional<User> collectedUser = userRepository.findById(4L);
 
         Assertions.assertThat(collectedUser.get()).isNotNull();
         Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
-        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo("firstname");
-        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo("lastname");
-        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo("randomPassword");
-        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo("email@domain.com");
+        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user1.getFirstname());
+        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user1.getLastname());
+        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo(user1.getPassword());
+        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo(user1.getEmail());
         for (GrantedAuthority role : collectedUser.get().getAuthorities()) {
             Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
         } // !! to improve
@@ -52,12 +58,6 @@ public class UserRepositoryTest {
     @DisplayName("FindAll() returns the 5 expected Users")
     @Test
     public void FindAll_ReturnFiveSavedUsers() {
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(new Role(1, "ADMIN"));
-        User user1 = new User(null, "firstname1", "lastname1", "email1@domain.com", "randomPassword1",
-                roleSet);
-        User user2 = new User(null, "firstname2", "lastname2", "email2@domain.com", "randomPassword2",
-                roleSet);
         userRepository.save(user1);
         userRepository.save(user2);
         Iterable<User> users = userRepository.findAll();
@@ -80,18 +80,14 @@ public class UserRepositoryTest {
     @DisplayName("FindById() returns the expected user")
     @Test
     public void FindById_ReturnOneTargetUser() {
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(new Role(1, "ADMIN"));
-        User user = new User(1L, "firstname", "lastname", "email@domain.com", "randomPassword",
-                roleSet);
-        userRepository.save(user);
-        Optional<User> collectedUser = userRepository.findById(1L);
+        userRepository.save(user1);
+        Optional<User> collectedUser = userRepository.findById(4L);
         Assertions.assertThat(collectedUser.get()).isNotNull();
         Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
-        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo("firstname");
-        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo("lastname");
-        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo("randomPassword");
-        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo("email@domain.com");
+        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user1.getFirstname());
+        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user1.getLastname());
+        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo(user1.getPassword());
+        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo(user1.getEmail());
         for (GrantedAuthority role : collectedUser.get().getAuthorities()) {
             Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
         }
@@ -100,18 +96,14 @@ public class UserRepositoryTest {
     @DisplayName("findByEmail() returns the expected user")
     @Test
     public void FindByEmail_ReturnOneTargetUser() {
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(new Role(1, "ADMIN"));
-        User user = new User(1L, "firstname", "lastname", "email@domain.com", "randomPassword",
-                roleSet);
-        userRepository.save(user);
-        Optional<User> collectedUser = userRepository.findByEmail("email@domain.com");
+        userRepository.save(user1);
+        Optional<User> collectedUser = userRepository.findByEmail("email1@domain.com");
         Assertions.assertThat(collectedUser.get()).isNotNull();
         Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
-        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo("firstname");
-        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo("lastname");
-        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo("randomPassword");
-        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo("email@domain.com");
+        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user1.getFirstname());
+        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user1.getLastname());
+        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo(user1.getPassword());
+        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo(user1.getEmail());
         for (GrantedAuthority role : collectedUser.get().getAuthorities()) {
             Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
         }

@@ -38,11 +38,6 @@ public class UserServiceTest {
     @DisplayName("Save() saves one Message into DB.")
     public void getUser() {
 
-        // Set<Role> roleSet = new HashSet<>();
-        // roleSet.add(new Role(1, "ADMIN"));
-        // User user = new User(1L, "firstname", "lastname", "email@domain.com", "randomPassword",
-        //         roleSet);
-
         when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(user1));
 
         Optional<User> collectedUser = userService.getUser(1L);
