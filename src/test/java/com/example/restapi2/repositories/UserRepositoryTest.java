@@ -30,10 +30,10 @@ public class UserRepositoryTest {
 
     private final Set<Role> roleSet = Set.of(new Role(1, "ADMIN"));
 
-    private final User user1 = new User(null, "firstname1", "lastname1", "email1@domain.com", "randomPassword1",
+    private final User user1 = new User(4L, "firstname1", "lastname1", "email1@domain.com", "randomPassword1",
             roleSet);
 
-    private final User user2 = new User(null, "firstname2", "lastname2", "email2@domain.com", "randomPassword2",
+    private final User user2 = new User(5L, "firstname2", "lastname2", "email2@domain.com", "randomPassword2",
             roleSet);
 
     @DisplayName("Save() saves one User into DB.")
