@@ -3,7 +3,7 @@ package com.example.restapi2.services;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
-import java.util.HashSet;
+// import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,14 +36,14 @@ public class UserServiceTest {
             roleSet, new Date(), new Date());
 
     @Test
-    @DisplayName("Save() saves one Message into DB.")
+    @DisplayName(".getUser(id) should return the expected User")
     public void getUser() {
 
         when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(user1));
 
         Optional<User> collectedUser = userService.getUser(1L);
 
-        Assertions.assertThat(collectedUser.get()).isNotNull();
+        Assertions.assertThat(collectedUser.isPresent()).isTrue();
         Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
         Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user1.getFirstname());
         Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user1.getLastname());
@@ -52,6 +52,6 @@ public class UserServiceTest {
         for (GrantedAuthority role : collectedUser.get().getAuthorities()) {
             Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
         } // !! to improve
-
     }
+
 }

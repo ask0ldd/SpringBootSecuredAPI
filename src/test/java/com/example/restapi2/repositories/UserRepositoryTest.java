@@ -42,7 +42,7 @@ public class UserRepositoryTest {
 
     @DisplayName("Save() saves one User into DB.")
     @Test
-    public void SaveUser_ReturnSavedUserFromDB() {
+    public void saveUser_ReturnSavedUserFromDB() {
 
         userRepository.save(user1);
         // 4L since 3 users are created when initializing the context
@@ -61,7 +61,7 @@ public class UserRepositoryTest {
 
     @DisplayName("FindAll() returns the 5 expected Users")
     @Test
-    public void FindAll_ReturnFiveSavedUsers() {
+    public void findAll_ReturnFiveSavedUsers() {
         userRepository.save(user1);
         userRepository.save(user2);
         Iterable<User> users = userRepository.findAll();
@@ -83,7 +83,7 @@ public class UserRepositoryTest {
 
     @DisplayName("FindById() returns the expected user")
     @Test
-    public void FindById_ReturnOneTargetUser() {
+    public void findById_ReturnOneTargetUser() {
         userRepository.save(user1);
         Optional<User> collectedUser = userRepository.findById(4L);
         Assertions.assertThat(collectedUser.isPresent()).isTrue();
@@ -99,7 +99,7 @@ public class UserRepositoryTest {
 
     @DisplayName("findByEmail() returns the expected user")
     @Test
-    public void FindByEmail_ReturnOneTargetUser() {
+    public void findByEmail_ReturnOneTargetUser() {
         userRepository.save(user1);
         Optional<User> collectedUser = userRepository.findByEmail("email1@domain.com");
         Assertions.assertThat(collectedUser.isPresent()).isTrue();
@@ -115,13 +115,41 @@ public class UserRepositoryTest {
 
     @DisplayName("Delete() returns the expected user")
     @Test
-    public void Delete_ReturnAnEmptyOptional() {
+    public void delete_ReturnAnEmptyOptional() {
         userRepository.save(user1);
         Optional<User> collectedUser = userRepository.findById(4L);
         Assertions.assertThat(collectedUser.isPresent()).isTrue();
         userRepository.deleteById(collectedUser.get().getUserId());
         Optional<User> postDeletionCollectedUser = userRepository.findById(4L);
         Assertions.assertThat(postDeletionCollectedUser.isEmpty()).isTrue();
+    }
+
+    @DisplayName("Update() returns the expected user")
+    @Test
+    public void update_ReturnAnEmptyOptional() {
+        userRepository.save(user1);
+        Optional<User> collectedUser = userRepository.findById(4L);
+        Assertions.assertThat(collectedUser.isPresent()).isTrue();
+        Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
+        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user1.getFirstname());
+        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user1.getLastname());
+        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo(user1.getPassword());
+        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo(user1.getEmail());
+        for (GrantedAuthority role : collectedUser.get().getAuthorities()) {
+            Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
+        }
+
+        User targetUser = new User(4L, "updated firstname1", "updated lastname1", "updatedemail1@domain.com",
+                "updated randomPassword1",
+                roleSet, new Date(), new Date());
+
+        userRepository.save(targetUser);
+        Optional<User> postUpdateCollectedUser = userRepository.findById(4L);
+        Assertions.assertThat(postUpdateCollectedUser.isPresent()).isTrue();
+        Assertions.assertThat(postUpdateCollectedUser.get().getFirstname()).isEqualTo("updated firstname1");
+        Assertions.assertThat(postUpdateCollectedUser.get().getLastname()).isEqualTo("updated lastname1");
+        Assertions.assertThat(postUpdateCollectedUser.get().getPassword()).isEqualTo("updated randomPassword1");
+        Assertions.assertThat(postUpdateCollectedUser.get().getEmail()).isEqualTo("updatedemail1@domain.com");
     }
 
 }
