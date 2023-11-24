@@ -3,7 +3,7 @@ package com.example.restapi2.dto;
 import com.example.restapi2.models.User;
 
 public class LoginResponseDto {
-    private User user;
+    private LoggedUserDto user;
     private String jwt;
 
     public LoginResponseDto() {
@@ -11,23 +11,20 @@ public class LoginResponseDto {
     }
 
     public LoginResponseDto(User user, String jwt) {
-        this.user = user;
+        super();
+        this.user = new LoggedUserDto(user); // return a simplified version of the user model
         this.jwt = jwt;
     }
 
-    public User getUser() {
-        // get rid password
-        User user = this.user;
-        user.setPassword(null);
-        return user;
-        // return this.user;
+    public LoggedUserDto getUser() {
+        return this.user;
     }
 
     public String getJwt() {
         return this.jwt;
     }
 
-    public void setUser(User user) {
+    public void setUser(LoggedUserDto user) {
         this.user = user;
     }
 
