@@ -109,4 +109,15 @@ public class UserRepositoryTest {
         }
     }
 
+    @DisplayName("Delete() returns the expected user")
+    @Test
+    public void Delete_ReturnAnEmptyOptional() {
+        userRepository.save(user1);
+        Optional<User> collectedUser = userRepository.findById(4L);
+        Assertions.assertThat(collectedUser.isPresent()).isTrue();
+        userRepository.deleteById(collectedUser.get().getUserId());
+        Optional<User> postDeletionCollectedUser = userRepository.findById(4L);
+        Assertions.assertThat(postDeletionCollectedUser.isEmpty()).isTrue();
+    }
+
 }
