@@ -1,6 +1,7 @@
 package com.example.restapi2.repositories;
 
 import java.util.ArrayList;
+import java.util.Date;
 // import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +17,8 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import com.example.restapi2.models.User;
 import com.example.restapi2.models.Role;
@@ -23,6 +26,7 @@ import com.example.restapi2.models.Role;
 // !!!!!!!!!!!! indicates which class os holding the context to load
 @SpringBootTest(classes = { com.example.restapi2.Restapi2Application.class })
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD) // reinit context between each tests
 public class UserRepositoryTest {
 
     @Autowired
@@ -31,10 +35,10 @@ public class UserRepositoryTest {
     private final Set<Role> roleSet = Set.of(new Role(1, "ADMIN"));
 
     private final User user1 = new User(4L, "firstname1", "lastname1", "email1@domain.com", "randomPassword1",
-            roleSet);
+            roleSet, new Date(), new Date());
 
     private final User user2 = new User(5L, "firstname2", "lastname2", "email2@domain.com", "randomPassword2",
-            roleSet);
+            roleSet, new Date(), new Date());
 
     @DisplayName("Save() saves one User into DB.")
     @Test
@@ -44,7 +48,7 @@ public class UserRepositoryTest {
         // 4L since 3 users are created when initializing the context
         Optional<User> collectedUser = userRepository.findById(4L);
 
-        Assertions.assertThat(collectedUser.get()).isNotNull();
+        Assertions.assertThat(collectedUser.isPresent()).isTrue();
         Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
         Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user1.getFirstname());
         Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user1.getLastname());
@@ -82,7 +86,7 @@ public class UserRepositoryTest {
     public void FindById_ReturnOneTargetUser() {
         userRepository.save(user1);
         Optional<User> collectedUser = userRepository.findById(4L);
-        Assertions.assertThat(collectedUser.get()).isNotNull();
+        Assertions.assertThat(collectedUser.isPresent()).isTrue();
         Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
         Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user1.getFirstname());
         Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user1.getLastname());
@@ -98,7 +102,7 @@ public class UserRepositoryTest {
     public void FindByEmail_ReturnOneTargetUser() {
         userRepository.save(user1);
         Optional<User> collectedUser = userRepository.findByEmail("email1@domain.com");
-        Assertions.assertThat(collectedUser.get()).isNotNull();
+        Assertions.assertThat(collectedUser.isPresent()).isTrue();
         Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
         Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user1.getFirstname());
         Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user1.getLastname());

@@ -2,6 +2,7 @@ package com.example.restapi2.services;
 
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class UserServiceTest {
     private final Set<Role> roleSet = Set.of(new Role(1, "ADMIN"));
 
     private final User user1 = new User(1L, "firstname", "lastname", "email@domain.com", "randomPassword",
-            roleSet);
+            roleSet, new Date(), new Date());
 
     @Test
     @DisplayName("Save() saves one Message into DB.")

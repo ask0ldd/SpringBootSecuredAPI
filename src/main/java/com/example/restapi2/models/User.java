@@ -20,6 +20,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 // import lombok.Builder;
 import lombok.Data;
 
@@ -35,6 +36,7 @@ import lombok.Data;
  * de la base de données.
  */
 // @Builder // so we can build a new user in our tests
+@AllArgsConstructor
 @Table(name = "utilisateurs")
 /* spring security needs some UserDetails methods to be implemented */
 public class User implements UserDetails {
@@ -57,6 +59,11 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false, length = 255)
     private String password;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles_junction", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "role_id") })
+    private Set<Role> authorities;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private Date creation;
@@ -71,18 +78,21 @@ public class User implements UserDetails {
         authorities = new HashSet<>();
     }
 
-    public User(Long userId, String firstName, String lastName, String email, String password,
-            Set<Role> authorities, Date creation, Date update) {
-        super();
-        this.userId = userId;
-        this.firstname = firstName;
-        this.lastname = lastName;
-        this.email = email;
-        this.password = password;
-        this.authorities = authorities;
-        this.creation = creation;
-        this.update = update;
-    }
+    /*
+     * public User(Long userId, String firstName, String lastName, String email,
+     * String password,
+     * Set<Role> authorities, Date creation, Date update) {
+     * super();
+     * this.userId = userId;
+     * this.firstname = firstName;
+     * this.lastname = lastName;
+     * this.email = email;
+     * this.password = password;
+     * this.authorities = authorities;
+     * this.creation = creation;
+     * this.update = update;
+     * }
+     */
 
     public User(Long userId, String firstName, String lastName, String email, String password,
             Set<Role> authorities) {
@@ -114,11 +124,6 @@ public class User implements UserDetails {
      * return List.of(new SimpleGrantedAuthority(userRole));
      * }
      */
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles_junction", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
-            @JoinColumn(name = "role_id") })
-    private Set<Role> authorities;
 
     public Long getUserId() {
         return this.userId;
