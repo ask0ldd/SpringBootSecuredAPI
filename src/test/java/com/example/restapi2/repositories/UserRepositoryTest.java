@@ -43,6 +43,7 @@ public class UserRepositoryTest {
     @DisplayName("Save() saves one User into DB.")
     @Test
     public void saveUser_ReturnSavedUserFromDB() {
+        Assertions.assertThat(userRepository.findById(4L).isPresent()).isFalse();
 
         userRepository.save(user1);
         // 4L since 3 users are created when initializing the context

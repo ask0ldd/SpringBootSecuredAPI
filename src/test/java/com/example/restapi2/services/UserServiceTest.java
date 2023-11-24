@@ -36,7 +36,7 @@ public class UserServiceTest {
             roleSet, new Date(), new Date());
 
     @Test
-    @DisplayName(".getUser(id) should return the expected User")
+    @DisplayName("User exists : .getUser(id) should return the expected User")
     public void getUser() {
 
         when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(user1));
@@ -52,6 +52,18 @@ public class UserServiceTest {
         for (GrantedAuthority role : collectedUser.get().getAuthorities()) {
             Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
         } // !! to improve
+    }
+
+    @Test
+    @DisplayName("User doesn't exist : .getUser(id) should return an empty Optional")
+    public void getMissingUser() {
+
+        when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(null));
+
+        Optional<User> collectedUser = userService.getUser(1L);
+
+        Assertions.assertThat(collectedUser.isPresent()).isFalse();
+        
     }
 
 }
