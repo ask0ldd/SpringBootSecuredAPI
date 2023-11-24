@@ -97,4 +97,24 @@ public class UserRepositoryTest {
         }
     }
 
+    @DisplayName("findByEmail() returns the expected user")
+    @Test
+    public void FindByEmail_ReturnOneTargetUser() {
+        Set<Role> roleSet = new HashSet<>();
+        roleSet.add(new Role(1, "ADMIN"));
+        User user = new User(1L, "firstname", "lastname", "email@domain.com", "randomPassword",
+                roleSet);
+        userRepository.save(user);
+        Optional<User> collectedUser = userRepository.findByEmail("email@domain.com");
+        Assertions.assertThat(collectedUser.get()).isNotNull();
+        Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
+        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo("firstname");
+        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo("lastname");
+        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo("randomPassword");
+        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo("email@domain.com");
+        for (GrantedAuthority role : collectedUser.get().getAuthorities()) {
+            Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
+        }
+    }
+
 }
