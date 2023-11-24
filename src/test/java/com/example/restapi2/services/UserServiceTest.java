@@ -14,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.example.restapi2.models.Role;
@@ -30,25 +29,30 @@ public class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
+    private final Set<Role> roleSet = Set.of(new Role(1, "ADMIN"));
+
+    private final User user1 = new User(1L, "firstname", "lastname", "email@domain.com", "randomPassword",
+            roleSet);
+
     @Test
     @DisplayName("Save() saves one Message into DB.")
     public void getUser() {
 
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(new Role(1, "ADMIN"));
-        User user = new User(1L, "firstname", "lastname", "email@domain.com", "randomPassword",
-                roleSet);
+        // Set<Role> roleSet = new HashSet<>();
+        // roleSet.add(new Role(1, "ADMIN"));
+        // User user = new User(1L, "firstname", "lastname", "email@domain.com", "randomPassword",
+        //         roleSet);
 
-        when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(user));
+        when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(user1));
 
         Optional<User> collectedUser = userService.getUser(1L);
 
         Assertions.assertThat(collectedUser.get()).isNotNull();
         Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
-        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo("firstname");
-        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo("lastname");
-        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo("randomPassword");
-        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo("email@domain.com");
+        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user1.getFirstname());
+        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user1.getLastname());
+        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo(user1.getPassword());
+        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo(user1.getEmail());
         for (GrantedAuthority role : collectedUser.get().getAuthorities()) {
             Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
         } // !! to improve
