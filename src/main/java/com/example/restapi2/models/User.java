@@ -1,9 +1,12 @@
 package com.example.restapi2.models;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -17,7 +20,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import lombok.Builder;
+// import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -31,7 +34,7 @@ import lombok.Data;
  * @Entity est une annotation qui indique que la classe correspond à une table
  * de la base de données.
  */
-@Builder // so we can build a new user in our tests
+// @Builder // so we can build a new user in our tests
 @Table(name = "utilisateurs")
 /* spring security needs some UserDetails methods to be implemented */
 public class User implements UserDetails {
@@ -42,22 +45,43 @@ public class User implements UserDetails {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false, length = 255)
     private String firstname;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false, length = 255)
     private String lastname;
 
     @Column(name = "email", unique = true) // !!! unique
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false, length = 255)
     private String password;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private Date creation;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date update;
 
     // !!! https://www.baeldung.com/jpa-no-argument-constructor-entity-class
     public User() {
         super();
         authorities = new HashSet<>();
+    }
+
+    public User(Long userId, String firstName, String lastName, String email, String password,
+            Set<Role> authorities, Date creation, Date update) {
+        super();
+        this.userId = userId;
+        this.firstname = firstName;
+        this.lastname = lastName;
+        this.email = email;
+        this.password = password;
+        this.authorities = authorities;
+        this.creation = creation;
+        this.update = update;
     }
 
     public User(Long userId, String firstName, String lastName, String email, String password,
@@ -69,6 +93,8 @@ public class User implements UserDetails {
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.creation = new Date();
+        this.update = new Date();
     }
 
     /*

@@ -26,7 +26,7 @@ public class RentalRepositoryTest {
     @Test
     public void SaveRental_ReturnSavedRentalFromDB() {
         Date date = new Date();
-        Rental rental = new Rental(1L, 1L, "rental name", "rental description", "picture url", 30, 300F, date,
+        Rental rental = new Rental(1L, 1L, "rental name", "rental description", "picture url", 30F, 300F, date,
                 date);
 
         rentalRepository.save(rental);
@@ -40,7 +40,7 @@ public class RentalRepositoryTest {
         Assertions.assertThat(collectedMessage.get().getName()).isEqualTo("rental name");
         Assertions.assertThat(collectedMessage.get().getDescription()).isEqualTo("rental description");
         Assertions.assertThat(collectedMessage.get().getPicture()).isEqualTo("picture url");
-        Assertions.assertThat(collectedMessage.get().getSurface()).isEqualTo(30);
+        Assertions.assertThat(collectedMessage.get().getSurface()).isEqualTo(30F);
         Assertions.assertThat(collectedMessage.get().getPrice()).isEqualTo(300F);
         /*
          * Assertions.assertThat(collectedMessage.get().getCreation()).isEqualTo(date);
@@ -52,9 +52,9 @@ public class RentalRepositoryTest {
     @Test
     public void FindAll_ReturnTwoSavedRentals() {
         Date date = new Date();
-        Rental rental1 = new Rental(1L, 1L, "rental name 1", "rental description 1", "picture url 1", 31, 301F, date,
+        Rental rental1 = new Rental(1L, 1L, "rental name 1", "rental description 1", "picture url 1", 31F, 301F, date,
                 date);
-        Rental rental2 = new Rental(2L, 2L, "rental name 2", "rental description 2", "picture url 2", 32, 302F, date,
+        Rental rental2 = new Rental(2L, 2L, "rental name 2", "rental description 2", "picture url 2", 32F, 302F, date,
                 date);
 
         rentalRepository.save(rental1);
@@ -72,7 +72,7 @@ public class RentalRepositoryTest {
         Assertions.assertThat(collectedRental1.getName()).isEqualTo("rental name 1");
         Assertions.assertThat(collectedRental1.getDescription()).isEqualTo("rental description 1");
         Assertions.assertThat(collectedRental1.getPicture()).isEqualTo("picture url 1");
-        Assertions.assertThat(collectedRental1.getSurface()).isEqualTo(31);
+        Assertions.assertThat(collectedRental1.getSurface()).isEqualTo(31F);
         Assertions.assertThat(collectedRental1.getPrice()).isEqualTo(301F);
 
         Assertions.assertThat(collectedRental2.getRentalId()).isEqualTo(2L);
@@ -80,7 +80,7 @@ public class RentalRepositoryTest {
         Assertions.assertThat(collectedRental2.getName()).isEqualTo("rental name 2");
         Assertions.assertThat(collectedRental2.getDescription()).isEqualTo("rental description 2");
         Assertions.assertThat(collectedRental2.getPicture()).isEqualTo("picture url 2");
-        Assertions.assertThat(collectedRental2.getSurface()).isEqualTo(32);
+        Assertions.assertThat(collectedRental2.getSurface()).isEqualTo(32F);
         Assertions.assertThat(collectedRental2.getPrice()).isEqualTo(302F);
     }
 }

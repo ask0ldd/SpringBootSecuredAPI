@@ -2,6 +2,9 @@ package com.example.restapi2.models;
 
 import java.util.Date;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,27 +32,29 @@ public class Rental {
     @Column(name = "rental_id")
     private Long rentalId;
 
-    @Column(name = "owner_id")
+    @Column(name = "owner_id", nullable = false)
     private Long owner;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 255)
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false, length = 2000)
     private String description;
 
-    @Column(name = "picture")
+    @Column(name = "picture", length = 255)
     private String picture;
 
     @Column(name = "surface")
-    private Integer surface;
+    private Float surface;
 
     @Column(name = "price")
     private Float price;
 
+    @CreationTimestamp
     @Column(name = "created_at")
     private Date creation;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private Date update;
 }
