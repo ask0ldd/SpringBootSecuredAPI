@@ -29,7 +29,7 @@ public class Rental {
     @Column(name = "rental_id")
     private Long rentalId;
 
-    @Column(name = "owner")
+    @Column(name = "owner_id")
     private Long owner;
 
     @Column(name = "name")
@@ -47,9 +47,9 @@ public class Rental {
     @Column(name = "price")
     private Float price;
 
-    @Column(name = "creation")
+    @Column(name = "created_at")
     private Date creation;
 
-    @Column(name = "update")
+    @Column(name = "updated_at")
     private Date update;
 }

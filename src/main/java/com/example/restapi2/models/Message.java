@@ -1,5 +1,10 @@
 package com.example.restapi2.models;
 
+import java.util.Date;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,10 +18,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor // generate constructor with all args
+@NoArgsConstructor // generate constructor with no args
+@Getter // generate getters
+@Setter // generate setters
 @Data
 @Entity
 @Builder
@@ -27,14 +32,22 @@ public class Message {
     @Column(name = "message_id")
     private Long messageId;
 
-    @Column(name = "sender")
-    private Long sender;
+    @Column(name = "rental_id", nullable = false)
+    private Long rentalId;
 
-    @Column(name = "recipient")
-    private Long recipient;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
-    @Column(name = "body")
-    private String body;
+    @Column(name = "message", nullable = false, length = 2000)
+    private String message;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private Date creation;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date update;
 
     /*
      * public Message(Long messageId, Long sender, Long recipient, String body) {
