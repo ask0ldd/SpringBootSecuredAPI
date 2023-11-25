@@ -11,6 +11,7 @@ import java.util.stream.StreamSupport;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -23,7 +24,6 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import com.example.restapi2.models.User;
 import com.example.restapi2.models.Role;
 
-// !!!!!!!!!!!! indicates which class os holding the context to load
 @SpringBootTest(classes = { com.example.restapi2.Restapi2Application.class })
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD) // reinit context between each tests
@@ -59,6 +59,8 @@ public class UserRepositoryTest {
             Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
         } // !! to improve
     }
+
+    // missing save() failure
 
     @DisplayName("FindAll() returns the 5 expected Users")
     @Test
