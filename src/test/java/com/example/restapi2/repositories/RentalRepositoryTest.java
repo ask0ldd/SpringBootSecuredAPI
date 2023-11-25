@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.GrantedAuthority;
 
 import com.example.restapi2.models.Rental;
+import com.example.restapi2.models.User;
 
 @SpringBootTest(classes = { com.example.restapi2.Restapi2Application.class })
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -85,5 +87,20 @@ public class RentalRepositoryTest {
                 Assertions.assertThat(collectedRental2.getPicture()).isEqualTo(rental2.getPicture());
                 Assertions.assertThat(collectedRental2.getSurface()).isEqualTo(rental2.getSurface());
                 Assertions.assertThat(collectedRental2.getPrice()).isEqualTo(rental2.getPrice());
+        }
+
+        @DisplayName("FindById() returns the expected Rental")
+        @Test
+        public void findById_ReturnOneTargetUser() {
+                rentalRepository.save(rental1);
+                Optional<Rental> collectedRental = rentalRepository.findById(1L);
+                Assertions.assertThat(collectedRental.isPresent()).isTrue();
+                Assertions.assertThat(collectedRental.get().getRentalId()).isGreaterThan(0);
+                Assertions.assertThat(collectedRental.get().getName()).isEqualTo(rental1.getName());
+                Assertions.assertThat(collectedRental.get().getDescription()).isEqualTo(rental1.getDescription());
+                Assertions.assertThat(collectedRental.get().getPicture()).isEqualTo(rental1.getPicture());
+                Assertions.assertThat(collectedRental.get().getPrice()).isEqualTo(rental1.getPrice());
+                Assertions.assertThat(collectedRental.get().getSurface()).isEqualTo(rental1.getSurface());
+                Assertions.assertThat(collectedRental.get().getOwner()).isEqualTo(rental1.getOwner());
         }
 }
