@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -123,6 +124,21 @@ public class UserServiceTest {
         });
         
         Assertions.assertThat(exception.getMessage()).isEqualTo("User not valid.");
+    }
+
+    @Test
+    @DisplayName("Save User")
+    public void saveUser() {
+
+        when(userRepository.save(Mockito.any(User.class))).thenReturn(user1);
+
+        User collectedUser = userService.saveUser(user1);
+
+        Assertions.assertThat(collectedUser).isNotNull();
+        Assertions.assertThat(collectedUser.getFirstname()).isEqualTo(user1.getFirstname());
+        Assertions.assertThat(collectedUser.getLastname()).isEqualTo(user1.getLastname());
+        Assertions.assertThat(collectedUser.getPassword()).isEqualTo(user1.getPassword());
+        Assertions.assertThat(collectedUser.getUsername()).isEqualTo(user1.getEmail());
     }
 
 }
