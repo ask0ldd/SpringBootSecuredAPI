@@ -64,6 +64,12 @@ public class User implements UserDetails {
             @JoinColumn(name = "role_id") })
     private Set<Role> authorities;
 
+    /*
+     * @OneToMany(mappedBy = "pokemon", cascade = CascadeType.ALL, orphanRemoval =
+     * true)
+     * private List<Message> messages = new ArrayList<Message>();
+     */
+
     @CreationTimestamp
     @Column(name = "created_at")
     private Date creation;

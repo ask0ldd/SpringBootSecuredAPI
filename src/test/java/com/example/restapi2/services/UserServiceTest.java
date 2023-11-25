@@ -1,5 +1,6 @@
 package com.example.restapi2.services;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
@@ -16,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.example.restapi2.models.Role;
 import com.example.restapi2.models.User;
@@ -94,6 +97,32 @@ public class UserServiceTest {
         Optional<User> collectedUser = userService.getUserByEmail("email@domain.com");
 
         Assertions.assertThat(collectedUser.isPresent()).isFalse();
+    }
+
+    @Test
+    @DisplayName("User exists : .loadUserByUsername(email) should return the expected User")
+    public void loadUserByUsername() {
+
+        when(userRepository.findByEmail("email@domain.com")).thenReturn(Optional.ofNullable(user1));
+
+        UserDetails collectedUser = userService.loadUserByUsername("email@domain.com");
+
+        Assertions.assertThat(collectedUser).isNotNull();
+        Assertions.assertThat(collectedUser.getPassword()).isEqualTo(user1.getPassword());
+        Assertions.assertThat(collectedUser.getUsername()).isEqualTo(user1.getEmail());
+    }
+
+    @Test
+    @DisplayName("User doesn't exist : .loadUserByUsername(email) should throw an error with the expected message")
+    public void loadMissingUserByUsername() {
+
+        when(userRepository.findByEmail("email@domain.com")).thenReturn(Optional.ofNullable(null));
+
+        Exception exception = assertThrows(UsernameNotFoundException.class, () -> {
+            userService.loadUserByUsername("email@domain.com");
+        });
+        
+        Assertions.assertThat(exception.getMessage()).isEqualTo("User not valid.");
     }
 
 }

@@ -50,6 +50,12 @@ public class Rental {
     @Column(name = "price")
     private Float price;
 
+    /*
+     * @OneToMany(mappedBy = "pokemon", cascade = CascadeType.ALL, orphanRemoval =
+     * true)
+     * private List<Message> messages = new ArrayList<Message>();
+     */
+
     @CreationTimestamp
     @Column(name = "created_at")
     private Date creation;
