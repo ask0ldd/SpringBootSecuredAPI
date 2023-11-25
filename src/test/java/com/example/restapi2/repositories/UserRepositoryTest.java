@@ -116,7 +116,7 @@ public class UserRepositoryTest {
         }
     }
 
-    @DisplayName("Delete() returns the expected user")
+    @DisplayName("Delete() returns an empty optional")
     @Test
     public void delete_ReturnAnEmptyOptional() {
         userRepository.save(user1);
@@ -127,9 +127,9 @@ public class UserRepositoryTest {
         Assertions.assertThat(postDeletionCollectedUser.isEmpty()).isTrue();
     }
 
-    @DisplayName("Update() returns the expected user")
+    @DisplayName("FindById() post Update() returns the expected user")
     @Test
-    public void update_ReturnAnEmptyOptional() {
+    public void update_ReturnTheExpectedUser() {
         userRepository.save(user1);
         Optional<User> collectedUser = userRepository.findById(4L);
         Assertions.assertThat(collectedUser.isPresent()).isTrue();

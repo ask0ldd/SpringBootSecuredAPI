@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,26 +14,38 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import com.example.restapi2.models.Rental;
 import com.example.restapi2.models.User;
 
 @SpringBootTest(classes = { com.example.restapi2.Restapi2Application.class })
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class RentalRepositoryTest {
 
         @Autowired
         private RentalRepository rentalRepository;
 
-        private final Date date = new Date();
-        private final Rental rental1 = new Rental(1L, 1L, "rental name 1", "rental description 1", "picture url 1", 31F,
-                        301F,
-                        date,
-                        date);
-        private final Rental rental2 = new Rental(2L, 2L, "rental name 2", "rental description 2", "picture url 2", 32F,
-                        302F,
-                        date,
-                        date);
+        private Date date;
+        private Rental rental1;
+        private Rental rental2;
+
+        @BeforeEach
+        public void init() {
+                date = new Date();
+                rental1 = new Rental(1L, 1L, "rental name 1", "rental description 1",
+                                "picture url 1", 31F,
+                                301F,
+                                date,
+                                date);
+                rental2 = new Rental(2L, 2L, "rental name 2", "rental description 2",
+                                "picture url 2", 32F,
+                                302F,
+                                date,
+                                date);
+        }
 
         @DisplayName("Save() saves one Rental into DB.")
         @Test
@@ -103,4 +116,55 @@ public class RentalRepositoryTest {
                 Assertions.assertThat(collectedRental.get().getSurface()).isEqualTo(rental1.getSurface());
                 Assertions.assertThat(collectedRental.get().getOwner()).isEqualTo(rental1.getOwner());
         }
+
+        @DisplayName("Delete() returns an empty optional")
+        @Test
+        public void delete_ReturnAnEmptyOptional() {
+                rentalRepository.save(rental1);
+                Optional<Rental> collectedRental = rentalRepository.findById(1L);
+                Assertions.assertThat(collectedRental.isPresent()).isTrue();
+                rentalRepository.deleteById(collectedRental.get().getRentalId());
+                Optional<Rental> postDeletionCollectedRental = rentalRepository.findById(1L);
+                Assertions.assertThat(postDeletionCollectedRental.isEmpty()).isTrue();
+        }
+
+        /*
+         * @DisplayName("Update() returns the expected user")
+         * 
+         * @Test
+         * public void update_ReturnAnEmptyOptional() {
+         * userRepository.save(user1);
+         * Optional<User> collectedUser = userRepository.findById(4L);
+         * Assertions.assertThat(collectedUser.isPresent()).isTrue();
+         * Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
+         * Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user1.
+         * getFirstname());
+         * Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user1.
+         * getLastname());
+         * Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo(user1.
+         * getPassword());
+         * Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo(user1.
+         * getEmail());
+         * for (GrantedAuthority role : collectedUser.get().getAuthorities()) {
+         * Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
+         * }
+         * 
+         * User targetUser = new User(4L, "updated firstname1", "updated lastname1",
+         * "updatedemail1@domain.com",
+         * "updated randomPassword1",
+         * roleSet, new Date(), new Date());
+         * 
+         * userRepository.save(targetUser);
+         * Optional<User> postUpdateCollectedUser = userRepository.findById(4L);
+         * Assertions.assertThat(postUpdateCollectedUser.isPresent()).isTrue();
+         * Assertions.assertThat(postUpdateCollectedUser.get().getFirstname()).
+         * isEqualTo("updated firstname1");
+         * Assertions.assertThat(postUpdateCollectedUser.get().getLastname()).
+         * isEqualTo("updated lastname1");
+         * Assertions.assertThat(postUpdateCollectedUser.get().getPassword()).
+         * isEqualTo("updated randomPassword1");
+         * Assertions.assertThat(postUpdateCollectedUser.get().getEmail()).isEqualTo(
+         * "updatedemail1@domain.com");
+         * }
+         */
 }
