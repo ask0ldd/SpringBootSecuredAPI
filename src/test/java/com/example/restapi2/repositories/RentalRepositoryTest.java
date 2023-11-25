@@ -13,12 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import com.example.restapi2.models.Rental;
-import com.example.restapi2.models.User;
 
 @SpringBootTest(classes = { com.example.restapi2.Restapi2Application.class })
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -49,7 +47,7 @@ public class RentalRepositoryTest {
 
         @DisplayName("Save() saves one Rental into DB.")
         @Test
-        public void SaveRental_ReturnSavedRentalFromDB() {
+        public void saveRental_ReturnSavedRental() {
 
                 rentalRepository.save(rental1);
 
@@ -64,15 +62,11 @@ public class RentalRepositoryTest {
                 Assertions.assertThat(collectedRental.get().getPicture()).isEqualTo(rental1.getPicture());
                 Assertions.assertThat(collectedRental.get().getSurface()).isEqualTo(rental1.getSurface());
                 Assertions.assertThat(collectedRental.get().getPrice()).isEqualTo(rental1.getPrice());
-                /*
-                 * Assertions.assertThat(collectedMessage.get().getCreation()).isEqualTo(date);
-                 * Assertions.assertThat(collectedMessage.get().getUpdate()).isEqualTo(date);
-                 */
         }
 
         @DisplayName("FindAll() returns the 2 expected Rentals")
         @Test
-        public void FindAll_ReturnTwoSavedRentals() {
+        public void findAll_ReturnTwoSavedRentals() {
 
                 rentalRepository.save(rental1);
                 rentalRepository.save(rental2);
@@ -104,7 +98,7 @@ public class RentalRepositoryTest {
 
         @DisplayName("FindById() returns the expected Rental")
         @Test
-        public void findById_ReturnOneTargetUser() {
+        public void findById_ReturnOneTargetRental() {
                 rentalRepository.save(rental1);
                 Optional<Rental> collectedRental = rentalRepository.findById(1L);
                 Assertions.assertThat(collectedRental.isPresent()).isTrue();
@@ -117,7 +111,7 @@ public class RentalRepositoryTest {
                 Assertions.assertThat(collectedRental.get().getOwner()).isEqualTo(rental1.getOwner());
         }
 
-        @DisplayName("Delete() returns an empty optional")
+        @DisplayName("Delete() returns an empty Optional")
         @Test
         public void delete_ReturnAnEmptyOptional() {
                 rentalRepository.save(rental1);
@@ -128,43 +122,35 @@ public class RentalRepositoryTest {
                 Assertions.assertThat(postDeletionCollectedRental.isEmpty()).isTrue();
         }
 
-        /*
-         * @DisplayName("Update() returns the expected user")
-         * 
-         * @Test
-         * public void update_ReturnAnEmptyOptional() {
-         * userRepository.save(user1);
-         * Optional<User> collectedUser = userRepository.findById(4L);
-         * Assertions.assertThat(collectedUser.isPresent()).isTrue();
-         * Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
-         * Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user1.
-         * getFirstname());
-         * Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user1.
-         * getLastname());
-         * Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo(user1.
-         * getPassword());
-         * Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo(user1.
-         * getEmail());
-         * for (GrantedAuthority role : collectedUser.get().getAuthorities()) {
-         * Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
-         * }
-         * 
-         * User targetUser = new User(4L, "updated firstname1", "updated lastname1",
-         * "updatedemail1@domain.com",
-         * "updated randomPassword1",
-         * roleSet, new Date(), new Date());
-         * 
-         * userRepository.save(targetUser);
-         * Optional<User> postUpdateCollectedUser = userRepository.findById(4L);
-         * Assertions.assertThat(postUpdateCollectedUser.isPresent()).isTrue();
-         * Assertions.assertThat(postUpdateCollectedUser.get().getFirstname()).
-         * isEqualTo("updated firstname1");
-         * Assertions.assertThat(postUpdateCollectedUser.get().getLastname()).
-         * isEqualTo("updated lastname1");
-         * Assertions.assertThat(postUpdateCollectedUser.get().getPassword()).
-         * isEqualTo("updated randomPassword1");
-         * Assertions.assertThat(postUpdateCollectedUser.get().getEmail()).isEqualTo(
-         * "updatedemail1@domain.com");
-         * }
-         */
+        @DisplayName("Update() returns the expected Rental")
+
+        @Test
+        public void update_ReturTheExpectedRental() {
+                rentalRepository.save(rental1);
+                Optional<Rental> collectedRental = rentalRepository.findById(1L);
+                Assertions.assertThat(collectedRental.get().getRentalId()).isGreaterThan(0);
+                Assertions.assertThat(collectedRental.get().getName()).isEqualTo(rental1.getName());
+                Assertions.assertThat(collectedRental.get().getDescription()).isEqualTo(rental1.getDescription());
+                Assertions.assertThat(collectedRental.get().getPicture()).isEqualTo(rental1.getPicture());
+                Assertions.assertThat(collectedRental.get().getPrice()).isEqualTo(rental1.getPrice());
+                Assertions.assertThat(collectedRental.get().getSurface()).isEqualTo(rental1.getSurface());
+                Assertions.assertThat(collectedRental.get().getOwner()).isEqualTo(rental1.getOwner());
+
+                Rental rental3 = new Rental(1L, 3L, "rental name 3", "rental description 3",
+                                "picture url 3", 33F,
+                                303F,
+                                date,
+                                date);
+                rentalRepository.save(rental3);
+                Optional<Rental> postUpdateCollectedRental = rentalRepository.findById(1L);
+                Assertions.assertThat(postUpdateCollectedRental.get().getRentalId()).isGreaterThan(0);
+                Assertions.assertThat(postUpdateCollectedRental.get().getName()).isEqualTo(rental3.getName());
+                Assertions.assertThat(postUpdateCollectedRental.get().getDescription())
+                                .isEqualTo(rental3.getDescription());
+                Assertions.assertThat(postUpdateCollectedRental.get().getPicture()).isEqualTo(rental3.getPicture());
+                Assertions.assertThat(postUpdateCollectedRental.get().getPrice()).isEqualTo(rental3.getPrice());
+                Assertions.assertThat(postUpdateCollectedRental.get().getSurface()).isEqualTo(rental3.getSurface());
+                Assertions.assertThat(postUpdateCollectedRental.get().getOwner()).isEqualTo(rental3.getOwner());
+
+        }
 }
