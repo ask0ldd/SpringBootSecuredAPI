@@ -66,4 +66,34 @@ public class UserServiceTest {
         
     }
 
+    @Test
+    @DisplayName("User exists : .getUserByEmail(email) should return the expected User")
+    public void getByUsername() {
+
+        when(userRepository.findByEmail("email@domain.com")).thenReturn(Optional.ofNullable(user1));
+
+        Optional<User> collectedUser = userService.getUserByEmail("email@domain.com");
+
+        Assertions.assertThat(collectedUser.isPresent()).isTrue();
+        Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
+        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user1.getFirstname());
+        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user1.getLastname());
+        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo(user1.getPassword());
+        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo(user1.getEmail());
+        for (GrantedAuthority role : collectedUser.get().getAuthorities()) {
+            Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
+        } // !! to improve
+    }
+
+    @Test
+    @DisplayName("User doesn't exist : .getUserByEmail(email) should return an empty Optional")
+    public void getMissingUserByUsername() {
+
+        when(userRepository.findByEmail("email@domain.com")).thenReturn(Optional.ofNullable(null));
+
+        Optional<User> collectedUser = userService.getUserByEmail("email@domain.com");
+
+        Assertions.assertThat(collectedUser.isPresent()).isFalse();
+    }
+
 }
