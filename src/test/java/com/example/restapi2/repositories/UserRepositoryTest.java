@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.StreamSupport;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -32,13 +33,18 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private final Set<Role> roleSet = Set.of(new Role(1, "ADMIN"));
+    private Set<Role> roleSet;
+    private User user1;
+    private User user2;
 
-    private final User user1 = new User(4L, "firstname1", "lastname1", "email1@domain.com", "randomPassword1",
-            roleSet, new Date(), new Date());
-
-    private final User user2 = new User(5L, "firstname2", "lastname2", "email2@domain.com", "randomPassword2",
-            roleSet, new Date(), new Date());
+    @BeforeEach
+    public void init() {
+        roleSet = Set.of(new Role(1, "ADMIN"));
+        user1 = new User(4L, "firstname1", "lastname1", "email1@domain.com", "randomPassword1",
+                roleSet, new Date(), new Date());
+        user2 = new User(5L, "firstname2", "lastname2", "email2@domain.com", "randomPassword2",
+                roleSet, new Date(), new Date());
+    }
 
     @DisplayName("Save() saves one User into DB.")
     @Test
@@ -127,9 +133,9 @@ public class UserRepositoryTest {
         Assertions.assertThat(postDeletionCollectedUser.isEmpty()).isTrue();
     }
 
-    @DisplayName("FindById() post Update() returns the expected user")
+    @DisplayName("Update() replaces the expected user")
     @Test
-    public void update_ReturnTheExpectedUser() {
+    public void update_ReplaceTheExpectedUser() {
         userRepository.save(user1);
         Optional<User> collectedUser = userRepository.findById(4L);
         Assertions.assertThat(collectedUser.isPresent()).isTrue();

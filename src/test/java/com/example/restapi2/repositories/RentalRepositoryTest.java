@@ -122,10 +122,10 @@ public class RentalRepositoryTest {
                 Assertions.assertThat(postDeletionCollectedRental.isEmpty()).isTrue();
         }
 
-        @DisplayName("Update() returns the expected Rental")
+        @DisplayName("Update() replaces the expected Rental")
 
         @Test
-        public void update_ReturTheExpectedRental() {
+        public void update_ReplaceTheExpectedRental() {
                 rentalRepository.save(rental1);
                 Optional<Rental> collectedRental = rentalRepository.findById(1L);
                 Assertions.assertThat(collectedRental.get().getRentalId()).isGreaterThan(0);
