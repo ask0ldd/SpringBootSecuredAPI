@@ -35,8 +35,8 @@ public class SecurityConfiguration {
 
     private final RSAKeyProperties rsaKeys;
 
-    public SecurityConfiguration(RSAKeyProperties rsaKeys) { // component wiring
-        this.rsaKeys = rsaKeys;
+    public SecurityConfiguration(RSAKeyProperties rsaKeys) {
+        this.rsaKeys = rsaKeys; // component wiring
     }
 
     @Bean

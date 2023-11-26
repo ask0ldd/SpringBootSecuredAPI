@@ -37,9 +37,16 @@ public class UserController {
         return userService.getUsers();
     }
 
+    /*
+     * @GetMapping("/users2")
+     * public Iterable<User> getUsers2() {
+     * return userService.getUsers();
+     * }
+     */
+
     @GetMapping("/users2")
-    public Iterable<User> getUsers2() {
-        return userService.getUsers();
+    public ResponseEntity<?> getUsers2() {
+        return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
     }
 
     @GetMapping("/test1")

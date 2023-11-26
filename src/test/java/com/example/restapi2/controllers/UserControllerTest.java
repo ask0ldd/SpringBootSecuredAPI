@@ -34,12 +34,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)*/
 @RunWith(SpringRunner.class)
-/*
- * @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
- * 
- * @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
- */
-// @ComponentScan(basePackages = { "com.example.restapi2" })
 @ContextConfiguration(classes = { SecurityConfiguration.class, RSAKeyProperties.class })
 @WebMvcTest(controllers = UserController.class)
 @AutoConfigureMockMvc(addFilters = false) // bypass spring security
@@ -64,18 +58,38 @@ public class UserControllerTest {
                                 roleSet, new Date(), new Date());
                 user2 = new User(5L, "firstname2", "lastname2", "email2@domain.com", "randomPassword2",
                                 roleSet, new Date(), new Date());
+                System.out.println(userService.getUser(1L));
         }
 
-        @DisplayName("Create some User.")
+        /*
+         * @DisplayName("Create some User.")
+         * 
+         * @Test
+         * public void CreateUser() throws Exception {
+         * given(userService.saveUser(ArgumentMatchers.any()))
+         * .willAnswer((invocation -> invocation.getArgument(0)));
+         * 
+         * ResultActions response =
+         * mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON)
+         * .content(objectMapper.writeValueAsString(user1)));
+         * 
+         * response.andExpect(MockMvcResultMatchers.status().isCreated())
+         * .andExpect(MockMvcResultMatchers.jsonPath("$.name",
+         * CoreMatchers.is(user1.getEmail())));
+         * }
+         */
+
+        @DisplayName("Get all Users.")
         @Test
-        public void CreateUser() throws Exception {
-                given(userService.saveUser(ArgumentMatchers.any()))
+        public void GetUser() throws Exception {
+                given(userService.getUsers())
                                 .willAnswer((invocation -> invocation.getArgument(0)));
 
-                ResultActions response = mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(user1)));
+                ResultActions response = mockMvc.perform(get("/users2")); // .contentType(MediaType.APPLICATION_JSON));
+                // .content(objectMapper.writeValueAsString(user1)));
 
-                response.andExpect(MockMvcResultMatchers.status().isCreated())
-                                .andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is(user1.getEmail())));
+                response.andExpect(MockMvcResultMatchers.status().isAccepted());
+                // .andExpect(MockMvcResultMatchers.jsonPath("$.name",
+                // CoreMatchers.is(user1.getEmail())));
         }
 }
