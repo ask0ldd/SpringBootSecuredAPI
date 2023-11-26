@@ -7,16 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+// import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.restapi2.configuration.RsaKeyProperties;
+// import com.example.restapi2.configuration.RSAKeyProperties;
 import com.example.restapi2.models.Role;
 import com.example.restapi2.models.User;
 import com.example.restapi2.repositories.RoleRepository;
 import com.example.restapi2.services.UserService;
 
-@EnableConfigurationProperties(RsaKeyProperties.class) // !!!
+// @EnableConfigurationProperties(RSAKeyProperties.class) // !!!
 @SpringBootApplication
 public class Restapi2Application implements CommandLineRunner {
 

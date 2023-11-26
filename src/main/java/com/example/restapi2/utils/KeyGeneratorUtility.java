@@ -3,7 +3,7 @@ package com.example.restapi2.utils;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 
-public class KeyGenerator {
+public class KeyGeneratorUtility {
 
     public static KeyPair generateRSAKeys() {
 

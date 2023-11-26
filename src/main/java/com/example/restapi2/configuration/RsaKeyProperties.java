@@ -1,11 +1,39 @@
 package com.example.restapi2.configuration;
 
+import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
+
 import java.security.interfaces.RSAPublicKey;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+// import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-@ConfigurationProperties(prefix = "rsa") // rsa + publickey & rsa + privatekey looked into application properties
-public record RsaKeyProperties(RSAPublicKey publicKey, RSAPrivateKey privateKey) {
-    // https://www.jmdoudoux.fr/java/dej/chap-records.htm
+import com.example.restapi2.utils.KeyGeneratorUtility;
+
+@Component
+public class RSAKeyProperties {
+    private RSAPublicKey publicKey;
+    private RSAPrivateKey privateKey;
+
+    public RSAKeyProperties() {
+        KeyPair pair = KeyGeneratorUtility.generateRSAKeys();
+        this.publicKey = (RSAPublicKey) pair.getPublic();
+        this.privateKey = (RSAPrivateKey) pair.getPrivate();
+    }
+
+    public RSAPublicKey getPublicKey() {
+        return this.publicKey;
+    }
+
+    public RSAPrivateKey getPrivateKey() {
+        return this.privateKey;
+    }
+
+    public void setPublicKey(RSAPublicKey publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public void setPrivateKey(RSAPrivateKey privateKey) {
+        this.privateKey = privateKey;
+    }
 }

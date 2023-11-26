@@ -34,7 +34,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 
-import com.example.restapi2.configuration.RsaKeyProperties;
+import com.example.restapi2.configuration.RSAKeyProperties;
 import com.example.restapi2.configuration.SecurityConfiguration;
 import com.example.restapi2.models.Role;
 import com.example.restapi2.models.User;
@@ -52,45 +52,46 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
  */
 // @ComponentScan(basePackages = { "com.example.restapi2" })
-@ContextConfiguration(classes = { SecurityConfiguration.class, RsaKeyProperties.class })
+@ContextConfiguration(classes = { SecurityConfiguration.class, RSAKeyProperties.class })
 @WebMvcTest(controllers = UserController.class)
 @AutoConfigureMockMvc(addFilters = false) // bypass spring security
 @ExtendWith(MockitoExtension.class)
 @TestPropertySource("classpath:application.properties")
 public class UserControllerTest {
 
-    @MockBean
-    private UserService userService;
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
+        @MockBean
+        private UserService userService;
+        @Autowired
+        private MockMvc mockMvc;
+        @Autowired
+        private ObjectMapper objectMapper;
 
-    @Autowired
-    private RsaKeyProperties rsaKeyProperties;
+        @Autowired
+        private RSAKeyProperties rsaKeyProperties;
 
-    private Set<Role> roleSet;
-    private User user1;
-    private User user2;
+        private Set<Role> roleSet;
+        private User user1;
+        private User user2;
 
-    @BeforeEach
-    public void init() {
-        roleSet = Set.of(new Role(1, "ADMIN"));
-        user1 = new User(4L, "firstname1", "lastname1", "email1@domain.com", "randomPassword1",
-                roleSet, new Date(), new Date());
-        user2 = new User(5L, "firstname2", "lastname2", "email2@domain.com", "randomPassword2",
-                roleSet, new Date(), new Date());
-    }
+        @BeforeEach
+        public void init() {
+                roleSet = Set.of(new Role(1, "ADMIN"));
+                user1 = new User(4L, "firstname1", "lastname1", "email1@domain.com", "randomPassword1",
+                                roleSet, new Date(), new Date());
+                user2 = new User(5L, "firstname2", "lastname2", "email2@domain.com", "randomPassword2",
+                                roleSet, new Date(), new Date());
+        }
 
-    @DisplayName("Create some User.")
-    @Test
-    public void CreateUser() throws Exception {
-        given(userService.saveUser(ArgumentMatchers.any())).willAnswer((invocation -> invocation.getArgument(0)));
+        @DisplayName("Create some User.")
+        @Test
+        public void CreateUser() throws Exception {
+                given(userService.saveUser(ArgumentMatchers.any()))
+                                .willAnswer((invocation -> invocation.getArgument(0)));
 
-        ResultActions response = mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user1)));
+                ResultActions response = mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(user1)));
 
-        response.andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is(user1.getEmail())));
-    }
+                response.andExpect(MockMvcResultMatchers.status().isCreated())
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is(user1.getEmail())));
+        }
 }
