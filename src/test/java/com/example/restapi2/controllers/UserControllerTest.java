@@ -1,11 +1,6 @@
 package com.example.restapi2.controllers;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.hamcrest.CoreMatchers;
@@ -13,30 +8,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.example.restapi2.Restapi2Application;
-import com.example.restapi2.configuration.RSAKeyProperties;
-import com.example.restapi2.configuration.SecurityConfiguration;
 import com.example.restapi2.models.Role;
 import com.example.restapi2.models.User;
 import com.example.restapi2.repositories.RoleRepository;
@@ -49,7 +34,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)*/
 //@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = { /* com.example.restapi2.Restapi2Application.class, */
+@ContextConfiguration(classes = { UserController.class,
                 com.example.restapi2.configuration.SecurityConfiguration.class,
                 com.example.restapi2.configuration.RSAKeyProperties.class })
 @WebMvcTest(controllers = UserController.class)
@@ -75,7 +60,7 @@ public class UserControllerTest {
         private User user1;
         private User user2;
         private User user3;
-        private final String laurentPassword = passwordEncoder.encode("laurent");
+        // private final String laurentPassword = passwordEncoder.encode("laurent");
 
         @BeforeEach
         public void init() {
@@ -101,10 +86,27 @@ public class UserControllerTest {
                 userCollection.add(user2);
                 userCollection.add(user3);
                 // needs to mock public UserDetails loadUserByUsername(String username)
+                given(userService.loadUserByUsername(Mockito.anyString())).willAnswer((invocation -> user1));
                 given(userService.getUsers()).willAnswer((invocation -> (Iterable<User>) userCollection));
 
-                ResultActions response = mockMvc.perform(get("/users"));
+                ResultActions response = mockMvc.perform(get("/users2"));
 
                 response.andExpect(MockMvcResultMatchers.status().isOk());
+
+                response.andExpect(MockMvcResultMatchers.status().isOk())
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(3)))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].firstname",
+                                                CoreMatchers.is("Laurent")))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].lastname", CoreMatchers.is("GINA")))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].email",
+                                                CoreMatchers.is("laurentgina@mail.com")))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.[1].firstname", CoreMatchers.is("Sophie")))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.[1].lastname", CoreMatchers.is("FONCEK")))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.[1].email",
+                                                CoreMatchers.is("sophiefoncek@mail.com")))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.[2].firstname", CoreMatchers.is("Agathe")))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.[2].lastname", CoreMatchers.is("FEELING")))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.[2].email",
+                                                CoreMatchers.is("agathefeeling@mail.com")));
         }
 }
