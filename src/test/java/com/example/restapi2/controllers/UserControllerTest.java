@@ -1,7 +1,11 @@
 package com.example.restapi2.controllers;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.hamcrest.CoreMatchers;
@@ -12,6 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
+
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +56,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @AutoConfigureMockMvc(addFilters = false) // bypass spring security
 @ExtendWith(MockitoExtension.class)
 // @SpringBootTest(classes = { com.example.restapi2.Restapi2Application.class })
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+// @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class UserControllerTest {
 
         @MockBean
@@ -66,71 +72,39 @@ public class UserControllerTest {
         @Autowired
         private PasswordEncoder passwordEncoder;
 
-        private Set<Role> roleSet;
         private User user1;
         private User user2;
+        private User user3;
+        private final String laurentPassword = passwordEncoder.encode("laurent");
 
         @BeforeEach
         public void init() {
-                if (roleRepository.findByAuthority("ADMIN").isPresent())
-                        return;
-                Role adminRole = roleRepository.save(new Role("ADMIN"));
-                roleRepository.save(new Role("USER"));
 
-                Role userRole = roleRepository.findByAuthority("USER").get();
-                Set<Role> userAuthority = new HashSet<>();
-                userAuthority.add(userRole);
-                Set<Role> adminAuthority = new HashSet<>();
-                adminAuthority.add(adminRole);
+                Set<Role> roleSet = Set.of(new Role(1, "ADMIN"));
+                Set<Role> roleSet2 = Set.of(new Role(2, "USER"));
 
-                /*
-                 * roleSet = Set.of(new Role(1, "ADMIN"));
-                 * user1 = new User(4L, "firstname1", "lastname1", "email1@domain.com",
-                 * "randomPassword1",
-                 * roleSet, new Date(), new Date());
-                 * user2 = new User(5L, "firstname2", "lastname2", "email2@domain.com",
-                 * "randomPassword2",
-                 * roleSet, new Date(), new Date());
-                 */
-                userService.saveUser(new User(null, "Laurent", "GINA", "laurentgina@mail.com",
-                                passwordEncoder.encode("laurent"), adminAuthority));
-                userService.saveUser(new User(null, "Sophie", "FONCEK", "sophiefoncek@mail.com",
-                                passwordEncoder.encode("sophie"), userAuthority));
-                userService.saveUser(new User(null, "Agathe", "FEELING", "agathefeeling@mail.com",
-                                passwordEncoder.encode("agathe"), userAuthority));
-                System.out.println(userService.getUser(1L));
+                user1 = new User(1L, "Laurent", "GINA", "laurentgina@mail.com",
+                                passwordEncoder.encode("laurent"), roleSet);
+                user2 = new User(2L, "Sophie", "FONCEK", "sophiefoncek@mail.com",
+                                passwordEncoder.encode("sophie"), roleSet2);
+                user3 = new User(3L, "Agathe", "FEELING", "agathefeeling@mail.com",
+                                passwordEncoder.encode("agathe"), roleSet2);
         }
-
-        /*
-         * @DisplayName("Create some User.")
-         * 
-         * @Test
-         * public void CreateUser() throws Exception {
-         * given(userService.saveUser(ArgumentMatchers.any()))
-         * .willAnswer((invocation -> invocation.getArgument(0)));
-         * 
-         * ResultActions response =
-         * mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON)
-         * .content(objectMapper.writeValueAsString(user1)));
-         * 
-         * response.andExpect(MockMvcResultMatchers.status().isCreated())
-         * .andExpect(MockMvcResultMatchers.jsonPath("$.name",
-         * CoreMatchers.is(user1.getEmail())));
-         * }
-         */
 
         @DisplayName("Get all Users.")
         @Test
         @WithMockUser(username = "laurentgina@mail.com", password = "laurent", roles = "ADMIN")
         public void GetUsers() throws Exception {
-                given(userService.getUsers())
-                                .willAnswer((invocation -> invocation.getArgument(0)));
 
-                ResultActions response = mockMvc.perform(get("/users2")); // .contentType(MediaType.APPLICATION_JSON));
-                // .content(objectMapper.writeValueAsString(user1)));
+                ArrayList<User> userCollection = new ArrayList<>();
+                userCollection.add(user1);
+                userCollection.add(user2);
+                userCollection.add(user3);
+                // needs to mock public UserDetails loadUserByUsername(String username)
+                given(userService.getUsers()).willAnswer((invocation -> (Iterable<User>) userCollection));
 
-                response.andExpect(MockMvcResultMatchers.status().isAccepted());
-                // .andExpect(MockMvcResultMatchers.jsonPath("$.name",
-                // CoreMatchers.is(user1.getEmail())));
+                ResultActions response = mockMvc.perform(get("/users"));
+
+                response.andExpect(MockMvcResultMatchers.status().isOk());
         }
 }
