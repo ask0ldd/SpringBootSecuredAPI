@@ -30,18 +30,12 @@ import com.example.restapi2.services.ValidationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-/*@SpringBootTest(classes = { com.example.restapi2.Restapi2Application.class })
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)*/
-//@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = { UserController.class,
                 com.example.restapi2.configuration.SecurityConfiguration.class,
                 com.example.restapi2.configuration.RSAKeyProperties.class })
 @WebMvcTest(controllers = UserController.class)
 @AutoConfigureMockMvc(addFilters = false) // bypass spring security
 @ExtendWith(MockitoExtension.class)
-// @SpringBootTest(classes = { com.example.restapi2.Restapi2Application.class })
-// @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class UserControllerTest {
 
         @MockBean
@@ -60,7 +54,6 @@ public class UserControllerTest {
         private User user1;
         private User user2;
         private User user3;
-        // private final String laurentPassword = passwordEncoder.encode("laurent");
 
         @BeforeEach
         public void init() {
