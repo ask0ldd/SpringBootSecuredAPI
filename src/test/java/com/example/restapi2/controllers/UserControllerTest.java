@@ -11,6 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.clearInvocations;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -101,5 +104,22 @@ public class UserControllerTest {
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.[2].lastname", CoreMatchers.is("FEELING")))
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.[2].email",
                                                 CoreMatchers.is("agathefeeling@mail.com")));
+        }
+
+        @DisplayName("get /user/{id} : Get Target User.")
+        @Test
+        @WithMockUser(username = "laurentgina@mail.com", password = "laurent", roles = "ADMIN")
+        public void GetUserById_ReturnUser() throws Exception {
+                clearInvocations(userService);
+                given(userService.getUser(Mockito.anyLong())).willAnswer((invocation -> user1));
+
+                ResultActions response = mockMvc.perform(get("/user/1"));
+
+                verify(userService, times(1)).getUser(Mockito.anyLong());
+                response.andExpect(MockMvcResultMatchers.status().isOk())
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.firstname", CoreMatchers.is("Laurent")))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.lastname", CoreMatchers.is("GINA")))
+                                .andExpect(MockMvcResultMatchers.jsonPath("$.email",
+                                                CoreMatchers.is("laurentgina@mail.com")));
         }
 }

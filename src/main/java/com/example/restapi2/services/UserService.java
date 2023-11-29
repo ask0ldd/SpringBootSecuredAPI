@@ -24,8 +24,10 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    public Optional<User> getUser(final Long id) {
-        return userRepository.findById(id);
+    public User getUser(final Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("Target user can't be found."));
+        return user;
     }
 
     public Optional<User> getUserByEmail(final String email) {
