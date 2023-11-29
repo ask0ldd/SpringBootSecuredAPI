@@ -96,14 +96,17 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("User doesn't exist : .getUserByEmail(email) should return an empty Optional")
+    @DisplayName("User doesn't exist : .getUserByEmail(email) should throw")
     public void getMissingUserByUsername() {
 
-        when(userRepository.findByEmail("email@domain.com")).thenReturn(Optional.ofNullable(null));
+        when(userRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.ofNullable(null));
 
-        Optional<User> collectedUser = userService.getUserByEmail("email@domain.com");
+        Exception exception = assertThrows(UserNotFoundException.class, () -> { 
+            userService.getUserByEmail("email@domain.com");
+        });
 
-        Assertions.assertThat(collectedUser.isPresent()).isFalse();
+        Assertions.assertThat(exception.getMessage()).isEqualTo("Target user can't be found.");
+        verify(userRepository, times(1)).findByEmail(Mockito.anyString());
     }
 
     @Test
