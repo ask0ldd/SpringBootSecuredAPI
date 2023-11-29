@@ -45,15 +45,15 @@ public class UserServiceTest {
 
         when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(user1));
 
-        Optional<User> collectedUser = userService.getUser(1L);
+        User collectedUser = userService.getUser(1L);
 
-        Assertions.assertThat(collectedUser.isPresent()).isTrue();
-        Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
-        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user1.getFirstname());
-        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user1.getLastname());
-        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo(user1.getPassword());
-        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo(user1.getEmail());
-        for (GrantedAuthority role : collectedUser.get().getAuthorities()) {
+        Assertions.assertThat(collectedUser != null).isTrue();
+        Assertions.assertThat(collectedUser.getUserId()).isGreaterThan(0);
+        Assertions.assertThat(collectedUser.getFirstname()).isEqualTo(user1.getFirstname());
+        Assertions.assertThat(collectedUser.getLastname()).isEqualTo(user1.getLastname());
+        Assertions.assertThat(collectedUser.getPassword()).isEqualTo(user1.getPassword());
+        Assertions.assertThat(collectedUser.getEmail()).isEqualTo(user1.getEmail());
+        for (GrantedAuthority role : collectedUser.getAuthorities()) {
             Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
         } // !! to improve
     }
@@ -64,9 +64,9 @@ public class UserServiceTest {
 
         when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(null));
 
-        Optional<User> collectedUser = userService.getUser(1L);
+        User collectedUser = userService.getUser(1L);
 
-        Assertions.assertThat(collectedUser.isPresent()).isFalse();
+        Assertions.assertThat(collectedUser != null).isFalse();
         
     }
 

@@ -50,9 +50,13 @@ public class UserController {
     }
 
     @GetMapping("/test1")
-    public Optional<User> getString() {
-        Optional<User> user = userService.getUser(1L);
-        return user;
+    public ResponseEntity<?> getString() {
+        try {
+            User currentUser = userService.getUser(1L);
+            return new ResponseEntity<>(currentUser, HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<>("Can't find the requested User.", HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/test2")
@@ -64,24 +68,28 @@ public class UserController {
 
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getUser(@PathVariable("id") final Long id) {
-        Optional<User> userOptional = userService.getUser(id);
-        if (userOptional.isPresent()) {
-            return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
-        } else {
+        try {
+            User currentUser = userService.getUser(id);
+            return new ResponseEntity<>(currentUser, HttpStatus.OK);
+        } catch (Exception exception) {
             return new ResponseEntity<>("Can't find the requested User.", HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping("/user")
-    public User createUser(@RequestBody User user) {
-        return userService.saveUser(user);
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        try {
+            User createdUser = userService.saveUser(user);
+            return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+        } catch (Exception exception) {
+            return new ResponseEntity<>("Can't create the target User.", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/user/{id}")
     public ResponseEntity<?> updateEmployee(@PathVariable("id") final Long id, @RequestBody User user) {
-        Optional<User> userOptional = userService.getUser(id);
-        if (userOptional.isPresent()) {
-            User currentUser = userOptional.get();
+        User currentUser = userService.getUser(id); // deal with throw
+        if (currentUser != null) {
 
             String firstName = user.getFirstname();
             if (firstName != null && validationService.isName(firstName)) {
