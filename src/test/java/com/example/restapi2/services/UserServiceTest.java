@@ -1,6 +1,8 @@
 package com.example.restapi2.services;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
@@ -21,6 +23,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import com.example.restapi2.exceptions.UserNotFoundException;
 import com.example.restapi2.models.Role;
 import com.example.restapi2.models.User;
 import com.example.restapi2.repositories.UserRepository;
@@ -47,7 +50,7 @@ public class UserServiceTest {
 
         User collectedUser = userService.getUser(1L);
 
-        Assertions.assertThat(collectedUser != null).isTrue();
+        Assertions.assertThat(collectedUser).isNotNull();
         Assertions.assertThat(collectedUser.getUserId()).isGreaterThan(0);
         Assertions.assertThat(collectedUser.getFirstname()).isEqualTo(user1.getFirstname());
         Assertions.assertThat(collectedUser.getLastname()).isEqualTo(user1.getLastname());
@@ -59,14 +62,17 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("User doesn't exist : .getUser(id) should return an empty Optional")
+    @DisplayName("User doesn't exist : .getUser(id) should throw")
     public void getMissingUser() {
 
-        when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(null));
+        when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(null));
 
-        User collectedUser = userService.getUser(1L);
+        Exception exception = assertThrows(UserNotFoundException.class, () -> { 
+            userService.getUser(1L);
+        });
 
-        Assertions.assertThat(collectedUser != null).isFalse();
+        Assertions.assertThat(exception.getMessage()).isEqualTo("Target user can't be found.");
+        verify(userRepository, times(1)).findById(Mockito.anyLong());
         
     }
 
@@ -76,15 +82,15 @@ public class UserServiceTest {
 
         when(userRepository.findByEmail("email@domain.com")).thenReturn(Optional.ofNullable(user1));
 
-        Optional<User> collectedUser = userService.getUserByEmail("email@domain.com");
+        User collectedUser = userService.getUserByEmail("email@domain.com");
 
-        Assertions.assertThat(collectedUser.isPresent()).isTrue();
-        Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
-        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user1.getFirstname());
-        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user1.getLastname());
-        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo(user1.getPassword());
-        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo(user1.getEmail());
-        for (GrantedAuthority role : collectedUser.get().getAuthorities()) {
+        Assertions.assertThat(collectedUser).isNotNull();
+        Assertions.assertThat(collectedUser.getUserId()).isGreaterThan(0);
+        Assertions.assertThat(collectedUser.getFirstname()).isEqualTo(user1.getFirstname());
+        Assertions.assertThat(collectedUser.getLastname()).isEqualTo(user1.getLastname());
+        Assertions.assertThat(collectedUser.getPassword()).isEqualTo(user1.getPassword());
+        Assertions.assertThat(collectedUser.getEmail()).isEqualTo(user1.getEmail());
+        for (GrantedAuthority role : collectedUser.getAuthorities()) {
             Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
         } // !! to improve
     }
