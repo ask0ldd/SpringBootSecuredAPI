@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.example.restapi2.exceptions.UserNotFoundException;
 import com.example.restapi2.models.User;
 import com.example.restapi2.repositories.UserRepository;
 
@@ -26,20 +27,27 @@ public class UserService implements UserDetailsService {
 
     public User getUser(final Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException("Target user can't be found."));
+                .orElseThrow(() -> new UserNotFoundException("Target user can't be found."));
         return user;
     }
 
-    public Optional<User> getUserByEmail(final String email) {
-        return userRepository.findByEmail(email);
+    public User getUserByEmail(final String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Target user can't be found."));
+        return user;
     }
 
     public Iterable<User> getUsers() {
-        return userRepository.findAll();
+        Iterable<User> users = userRepository.findAll();
+        if (!users.iterator().hasNext())
+            throw new UserNotFoundException("No user can be found.");
+        return users;
     }
 
     public void deleteUser(final Long id) {
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Target user can't be deleted."));
+        userRepository.delete(user);
     }
 
     public User saveUser(User user) {
