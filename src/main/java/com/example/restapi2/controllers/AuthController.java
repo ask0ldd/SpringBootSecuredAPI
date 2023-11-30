@@ -1,12 +1,15 @@
 package com.example.restapi2.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.restapi2.dto.LoggedUserDto;
 import com.example.restapi2.dto.LoginResponseDto;
 import com.example.restapi2.dto.RegistrationDto;
 import com.example.restapi2.models.User;
@@ -26,9 +29,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public LoginResponseDto userLogin(@RequestBody RegistrationDto body) {
+    public ResponseEntity<LoginResponseDto> userLogin(@RequestBody RegistrationDto body) {
         System.out.println("********************* LOGIN ***************************");
-        return authService.loginUser(body.getUsername(), body.getPassword());
+        LoginResponseDto loggedUser = authService.loginUser(body.getUsername(), body.getPassword());
+        return new ResponseEntity<>(loggedUser, HttpStatus.OK);
     }
 
 }

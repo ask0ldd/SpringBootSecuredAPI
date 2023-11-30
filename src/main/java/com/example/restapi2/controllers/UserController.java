@@ -33,8 +33,8 @@ public class UserController {
     // @GetMapping(value = "/users", produces = "application/json", consumes =
     // "application/json")
     @GetMapping("/users")
-    public Iterable<User> getUsers() {
-        return userService.getUsers();
+    public ResponseEntity<Iterable<User>> getUsers() {
+        return new ResponseEntity<Iterable<User>>(userService.getUsers(), HttpStatus.OK);
     }
 
     /*
@@ -46,33 +46,37 @@ public class UserController {
 
     @GetMapping("/users2")
     public ResponseEntity<?> getUsers2() {
-        return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
+        try {
+            return new ResponseEntity<Iterable<User>>(userService.getUsers(), HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<String>("Can't find any User.", HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/test1")
     public ResponseEntity<?> getString() {
         try {
             User currentUser = userService.getUser(1L);
-            return new ResponseEntity<>(currentUser, HttpStatus.OK);
+            return new ResponseEntity<User>(currentUser, HttpStatus.OK);
         } catch (Exception exception) {
-            return new ResponseEntity<>("Can't find the requested User.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("Can't find the requested User.", HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/test2")
-    public Iterable<String> getString2() {
+    public ResponseEntity<Iterable<String>> getString2() {
         List<String> list = new ArrayList<>();
         list.add("Volvo");
-        return list;
+        return new ResponseEntity<Iterable<String>>(list, HttpStatus.OK);
     }
 
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getUser(@PathVariable("id") final Long id) {
         try {
             User currentUser = userService.getUser(id);
-            return new ResponseEntity<>(currentUser, HttpStatus.OK);
+            return new ResponseEntity<User>(currentUser, HttpStatus.OK);
         } catch (Exception exception) {
-            return new ResponseEntity<>("Can't find the requested User.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("Can't find the requested User.", HttpStatus.NOT_FOUND);
         }
     }
 
