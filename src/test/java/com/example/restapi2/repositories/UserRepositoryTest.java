@@ -56,7 +56,7 @@ public class UserRepositoryTest {
         user4 = User.builder().userId(4L).firstname("firstname1").lastname("lastname1")
                 .email("email1@domain.com").password("randomPassword1").authorities(roleSet).creation(new Date())
                 .update(new Date()).build();
-        user4Replacement = new User(1L, "updated firstname3", "updated lastname3",
+        user4Replacement = new User(4L, "updated firstname3", "updated lastname3",
                 "updatedemail3@domain.com",
                 "randomPassword1", roleSet);
         user5 = User.builder().userId(5L).firstname("firstname2").lastname("lastname2")
@@ -149,7 +149,7 @@ public class UserRepositoryTest {
     @DisplayName("Delete() returns an empty optional")
     @Test
     public void delete_ReturnAnEmptyOptional() {
-        userRepository.save(user1);
+        userRepository.save(user4);
         Optional<User> collectedUser = userRepository.findById(4L);
         Assertions.assertThat(collectedUser.isPresent()).isTrue();
         userRepository.deleteById(collectedUser.get().getUserId());
@@ -160,42 +160,45 @@ public class UserRepositoryTest {
     @DisplayName("Update() replaces the expected user")
     @Test
     public void update_ReplaceTheExpectedUser() {
-        userRepository.save(user1);
+        userRepository.save(user4);
         Optional<User> collectedUser = userRepository.findById(4L);
         Assertions.assertThat(collectedUser.isPresent()).isTrue();
         Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
-        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user1.getFirstname());
-        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user1.getLastname());
-        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo(user1.getPassword());
-        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo(user1.getEmail());
+        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user4.getFirstname());
+        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user4.getLastname());
+        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo(user4.getPassword());
+        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo(user4.getEmail());
         for (GrantedAuthority role : collectedUser.get().getAuthorities()) {
             Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
         }
 
-        User targetUser = new User(4L, "updated firstname1", "updated lastname1", "updatedemail1@domain.com",
-                "updated randomPassword1",
-                roleSet, new Date(), new Date());
+        /*
+         * User targetUser = new User(4L, "updated firstname1", "updated lastname1",
+         * "updatedemail1@domain.com",
+         * "updated randomPassword1",
+         * roleSet, new Date(), new Date());
+         */
 
-        userRepository.save(targetUser);
+        userRepository.save(user4Replacement);
         Optional<User> postUpdateCollectedUser = userRepository.findById(4L);
         Assertions.assertThat(postUpdateCollectedUser.isPresent()).isTrue();
-        Assertions.assertThat(postUpdateCollectedUser.get().getFirstname()).isEqualTo("updated firstname1");
-        Assertions.assertThat(postUpdateCollectedUser.get().getLastname()).isEqualTo("updated lastname1");
-        Assertions.assertThat(postUpdateCollectedUser.get().getPassword()).isEqualTo("updated randomPassword1");
-        Assertions.assertThat(postUpdateCollectedUser.get().getEmail()).isEqualTo("updatedemail1@domain.com");
+        Assertions.assertThat(postUpdateCollectedUser.get().getFirstname()).isEqualTo(user4Replacement.getFirstname());
+        Assertions.assertThat(postUpdateCollectedUser.get().getLastname()).isEqualTo(user4Replacement.getLastname());
+        Assertions.assertThat(postUpdateCollectedUser.get().getPassword()).isEqualTo(user4Replacement.getPassword());
+        Assertions.assertThat(postUpdateCollectedUser.get().getEmail()).isEqualTo(user4Replacement.getEmail());
     }
 
     @DisplayName("Update() called with an invalid User")
     @Test
     public void update_ThrowsException() {
         userRepository.save(user4);
-        Optional<User> collectedUser = userRepository.findById(1L);
+        Optional<User> collectedUser = userRepository.findById(4L);
         Assertions.assertThat(collectedUser.isPresent()).isTrue();
         Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
-        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user1.getFirstname());
-        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user1.getLastname());
-        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo(user1.getPassword());
-        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo(user1.getEmail());
+        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user4.getFirstname());
+        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user4.getLastname());
+        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo(user4.getPassword());
+        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo(user4.getEmail());
 
         Exception exception = assertThrows(DataIntegrityViolationException.class, () -> {
             userRepository.save(user4Invalid);
