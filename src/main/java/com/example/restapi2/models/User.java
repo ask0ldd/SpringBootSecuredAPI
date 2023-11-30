@@ -21,6 +21,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 // import lombok.Builder;
 import lombok.Data;
 
@@ -37,6 +38,7 @@ import lombok.Data;
  */
 // @Builder // so we can build a new user in our tests
 @AllArgsConstructor
+@Builder
 @Table(name = "utilisateurs")
 /* spring security needs some UserDetails methods to be implemented */
 public class User implements UserDetails {
