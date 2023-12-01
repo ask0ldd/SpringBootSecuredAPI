@@ -22,7 +22,6 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-// import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -102,12 +101,12 @@ public class User implements UserDetails {
      * }
      */
 
-    public User(Long userId, String firstName, String lastName, String email, String password,
+    public User(Long userId, String firstname, String lastname, String email, String password,
             Set<Role> authorities) {
         super();
         this.userId = userId;
-        this.firstname = firstName;
-        this.lastname = lastName;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.email = email;
         this.password = password;
         this.authorities = authorities;

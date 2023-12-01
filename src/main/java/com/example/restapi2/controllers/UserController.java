@@ -138,7 +138,10 @@ public class UserController {
 
             User modifiedUser = userService.saveUser(currentUser);
 
-            return new ResponseEntity<>(/* userService.getUser(id) */ new ReturnableUserDto(modifiedUser),
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            return new ResponseEntity<>(new ReturnableUserDto(modifiedUser), headers,
                     HttpStatus.OK);
         } catch (Exception exception) {
             HttpHeaders headers = new HttpHeaders();
@@ -153,16 +156,3 @@ public class UserController {
     }
 
 }
-
-/*
- * @PostMapping("/login")
- * public ResponseEntity<?> getUserByEmail(@RequestBody String email) {
- * Optional<User> userOptional = userService.getUserByEmail(email);
- * if (userOptional.isPresent()) {
- * return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
- * } else {
- * return new ResponseEntity<>("Can't find the requested User.",
- * HttpStatus.NOT_FOUND);
- * }
- * }
- */
