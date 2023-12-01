@@ -1,8 +1,12 @@
 package com.example.restapi2.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.restapi2.dto.ReturnedUserDto;
 import com.example.restapi2.models.User;
 import com.example.restapi2.services.UserService;
 import com.example.restapi2.services.ValidationService;
@@ -37,7 +42,15 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity<?> getUsers() {
         try {
-            return new ResponseEntity<Iterable<User>>(userService.getUsers(), HttpStatus.OK);
+            Iterable<User> users = userService.getUsers();
+            ArrayList<ReturnedUserDto> returnableUsers = new ArrayList<ReturnedUserDto>();
+            for (User user : users) {
+                ReturnedUserDto returnableUser = ReturnedUserDto.builder().userId(user.getUserId())
+                        .firstName(user.getFirstname()).email(user.getEmail()).lastName(user.getLastname()).build();
+                returnableUsers.add(returnableUser);
+            }
+            return new ResponseEntity<Iterable<ReturnedUserDto>>((Iterable<ReturnedUserDto>) returnableUser,
+                    HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<String>("Can't find any User.", HttpStatus.NOT_FOUND);
         }

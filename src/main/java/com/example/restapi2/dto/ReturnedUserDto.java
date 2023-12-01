@@ -11,6 +11,7 @@ public class ReturnedUserDto {
     private String email;
 
     public ReturnedUserDto(Long userId, String firstname, String lastname, String email) {
+        super();
         this.userId = userId;
         this.firstName = firstname;
         this.lastName = lastname;
