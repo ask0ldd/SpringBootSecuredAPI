@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.example.restapi2.models.Rental;
 import com.example.restapi2.models.Role;
 import com.example.restapi2.models.User;
 import com.example.restapi2.repositories.RoleRepository;
@@ -64,6 +65,15 @@ public class Restapi2Application implements CommandLineRunner {
 				passwordEncoder.encode("sophie"), userAuthority));
 		userService.saveUser(new User(null, "Agathe", "FEELING", "agathefeeling@mail.com",
 				passwordEncoder.encode("agathe"), userAuthority));
+	}
+
+	private void createRentals() {
+		Rental rental1 = Rental.builder().name("name1").rentalId(1L).owner(1L).description("description1")
+				.picture("picture1.jpg").surface(31F).price(501F).build();
+		Rental rental2 = Rental.builder().name("name2").rentalId(2L).owner(2L).description("description2")
+				.picture("picture2.jpg").surface(32F).price(502F).build();
+		Rental rental3 = Rental.builder().name("name3").rentalId(3L).owner(3L).description("description3")
+				.picture("picture3.jpg").surface(33F).price(503F).build();
 	}
 
 }
