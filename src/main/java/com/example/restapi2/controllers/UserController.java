@@ -118,11 +118,11 @@ public class UserController {
 
             User modifiedUser = userService.saveUser(currentUser);
 
-            return new ResponseEntity<>(/* userService.getUser(id) */ modifiedUser, HttpStatus.OK);
+            return new ResponseEntity<User>(/* userService.getUser(id) */ modifiedUser, HttpStatus.OK);
         } catch (Exception exception) {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            return new ResponseEntity<>("Can't find the requested User.", headers, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("Can't find the requested User.", headers, HttpStatus.NOT_FOUND);
         }
     }
 
