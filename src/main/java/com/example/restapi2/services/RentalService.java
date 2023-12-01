@@ -28,4 +28,9 @@ public class RentalService {
             throw new UserNotFoundException("Can't find any Rental.");
         return rentals;
     }
+
+    public Rental saveRental(Rental rental) {
+        Rental savedRental = rentalRepository.save(rental);
+        return savedRental;
+    }
 }

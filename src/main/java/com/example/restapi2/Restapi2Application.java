@@ -13,6 +13,7 @@ import com.example.restapi2.models.Rental;
 import com.example.restapi2.models.Role;
 import com.example.restapi2.models.User;
 import com.example.restapi2.repositories.RoleRepository;
+import com.example.restapi2.services.RentalService;
 import com.example.restapi2.services.UserService;
 
 // @EnableConfigurationProperties(RSAKeyProperties.class) // !!!
@@ -21,6 +22,8 @@ public class Restapi2Application implements CommandLineRunner {
 
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private RentalService rentalService;
 
 	@Autowired
 	private RoleRepository roleRepository;
@@ -55,6 +58,7 @@ public class Restapi2Application implements CommandLineRunner {
 		// "***************\n\n");
 
 		this.createBaseUsers(adminAuthority, userAuthority);
+		this.createRentals();
 
 	}
 
@@ -74,6 +78,10 @@ public class Restapi2Application implements CommandLineRunner {
 				.picture("picture2.jpg").surface(32F).price(502F).build();
 		Rental rental3 = Rental.builder().name("name3").rentalId(3L).owner(3L).description("description3")
 				.picture("picture3.jpg").surface(33F).price(503F).build();
+
+		rentalService.saveRental(rental1);
+		rentalService.saveRental(rental2);
+		rentalService.saveRental(rental3);
 	}
 
 }
