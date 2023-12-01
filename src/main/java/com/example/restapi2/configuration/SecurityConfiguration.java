@@ -80,7 +80,7 @@ public class SecurityConfiguration {
                             .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/auth/*")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/users2")).permitAll()
-                            .requestMatchers(new AntPathRequestMatcher("/user/**")).permitAll()
+                            .requestMatchers(new AntPathRequestMatcher("/user/*")).permitAll()
                             .anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(
