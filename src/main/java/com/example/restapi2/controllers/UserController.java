@@ -83,7 +83,7 @@ public class UserController {
     public ResponseEntity<?> getString() {
         try {
             User currentUser = userService.getUser(1L);
-            return new ResponseEntity<User>(currentUser, HttpStatus.OK);
+            return new ResponseEntity<>(new ReturnableUserDto(currentUser), HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<String>("Can't find the requested User.", HttpStatus.NOT_FOUND);
         }
@@ -100,7 +100,7 @@ public class UserController {
     public ResponseEntity<?> getUser(@PathVariable("id") final Long id) {
         try {
             User currentUser = userService.getUser(id);
-            return new ResponseEntity<User>(currentUser, HttpStatus.OK);
+            return new ResponseEntity<>(new ReturnableUserDto(currentUser), HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<String>("Can't find the requested User.", HttpStatus.NOT_FOUND);
         }
@@ -110,7 +110,7 @@ public class UserController {
     public ResponseEntity<?> createUser(@RequestBody User user) {
         try {
             User createdUser = userService.saveUser(user);
-            return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+            return new ResponseEntity<>(new ReturnableUserDto(createdUser), HttpStatus.CREATED);
         } catch (Exception exception) {
             return new ResponseEntity<>("Can't create the target User.", HttpStatus.BAD_REQUEST);
         }
@@ -138,7 +138,8 @@ public class UserController {
 
             User modifiedUser = userService.saveUser(currentUser);
 
-            return new ResponseEntity<User>(/* userService.getUser(id) */ modifiedUser, HttpStatus.OK);
+            return new ResponseEntity<>(/* userService.getUser(id) */ new ReturnableUserDto(modifiedUser),
+                    HttpStatus.OK);
         } catch (Exception exception) {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
