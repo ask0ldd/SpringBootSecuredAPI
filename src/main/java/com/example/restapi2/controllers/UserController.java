@@ -121,14 +121,14 @@ public class UserController {
         try {
             User currentUser = userService.getUser(id); // !!! deal with throw
 
-            String firstName = user.getFirstname();
-            if (firstName != null && validationService.isName(firstName)) {
-                currentUser.setFirstname(firstName);
+            String firstname = user.getFirstname();
+            if (firstname != null && validationService.isName(firstname)) {
+                currentUser.setFirstname(firstname);
             }
 
-            String lastName = user.getLastname();
-            if (lastName != null && validationService.isName(lastName)) {
-                currentUser.setLastname(lastName);
+            String lastname = user.getLastname();
+            if (lastname != null && validationService.isName(lastname)) {
+                currentUser.setLastname(lastname);
             }
 
             String mail = user.getEmail();

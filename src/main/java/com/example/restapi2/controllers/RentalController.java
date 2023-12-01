@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.restapi2.dto.ReturnableUserDto;
@@ -41,6 +43,35 @@ public class RentalController {
             return new ResponseEntity<>(rental, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<String>("Can't find the requested Rental.", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/rental/{id}")
+    public ResponseEntity<?> updateEmployee(@PathVariable("id") final Long id, @RequestBody Rental rental) {
+        try {
+            Rental currentRental = rentalService.getRental(id); // !!! deal with throw
+
+            String name = rental.getName();
+            if (name != null) { // needs validation
+                currentRental.setDescription(name);
+            }
+
+            String desc = rental.getDescription();
+            if (desc != null) { // needs validation
+                currentRental.setDescription(desc);
+            }
+
+            Rental modifiedRental = rentalService.saveRental(currentRental);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            return new ResponseEntity<>(modifiedRental, headers,
+                    HttpStatus.OK);
+        } catch (Exception exception) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            return new ResponseEntity<String>("Can't find the requested Rental.", headers, HttpStatus.NOT_FOUND);
         }
     }
 }

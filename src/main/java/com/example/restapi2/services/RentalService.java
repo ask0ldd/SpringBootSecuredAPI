@@ -33,4 +33,10 @@ public class RentalService {
         Rental savedRental = rentalRepository.save(rental);
         return savedRental;
     }
+
+    public void deleteUser(final Long id) {
+        Rental rental = rentalRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Target rental can't be found."));
+        rentalRepository.delete(rental);
+    }
 }
