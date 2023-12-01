@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,8 +35,12 @@ public class UserController {
     // @GetMapping(value = "/users", produces = "application/json", consumes =
     // "application/json")
     @GetMapping("/users")
-    public ResponseEntity<Iterable<User>> getUsers() {
-        return new ResponseEntity<Iterable<User>>(userService.getUsers(), HttpStatus.OK);
+    public ResponseEntity<?> getUsers() {
+        try {
+            return new ResponseEntity<Iterable<User>>(userService.getUsers(), HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<String>("Can't find any User.", HttpStatus.NOT_FOUND);
+        }
     }
 
     /*
@@ -92,8 +98,8 @@ public class UserController {
 
     @PutMapping("/user/{id}")
     public ResponseEntity<?> updateEmployee(@PathVariable("id") final Long id, @RequestBody User user) {
-        User currentUser = userService.getUser(id); // deal with throw
-        if (currentUser != null) {
+        try {
+            User currentUser = userService.getUser(id); // !!! deal with throw
 
             String firstName = user.getFirstname();
             if (firstName != null && validationService.isName(firstName)) {
@@ -110,15 +116,13 @@ public class UserController {
                 currentUser.setEmail(mail);
             }
 
-            String password = user.getPassword();
-            if (password != null) {
-                currentUser.setPassword(password);
-            }
-            userService.saveUser(currentUser);
+            User modifiedUser = userService.saveUser(currentUser);
 
-            return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Can't find the requested User.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(/* userService.getUser(id) */ modifiedUser, HttpStatus.OK);
+        } catch (Exception exception) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            return new ResponseEntity<>("Can't find the requested User.", headers, HttpStatus.NOT_FOUND);
         }
     }
 
