@@ -3,6 +3,7 @@ package com.example.restapi2.configuration;
 // import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -81,6 +82,8 @@ public class SecurityConfiguration {
                             .requestMatchers(new AntPathRequestMatcher("/auth/*")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/users2")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/user/*")).permitAll()
+                            // .requestMatchers(new AntPathRequestMatcher("/rental/*",
+                            // "PUT")).hasRole("ADMIN")
                             .anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(

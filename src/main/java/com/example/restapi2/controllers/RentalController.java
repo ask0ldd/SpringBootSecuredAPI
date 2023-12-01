@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.restapi2.dto.ReturnableUserDto;
 import com.example.restapi2.models.Rental;
-import com.example.restapi2.models.User;
 import com.example.restapi2.services.RentalService;
 
 @RestController
@@ -49,11 +47,11 @@ public class RentalController {
     @PutMapping("/rental/{id}")
     public ResponseEntity<?> updateEmployee(@PathVariable("id") final Long id, @RequestBody Rental rental) {
         try {
-            Rental currentRental = rentalService.getRental(id); // !!! deal with throw
+            Rental currentRental = rentalService.getRental(id);
 
             String name = rental.getName();
             if (name != null) { // needs validation
-                currentRental.setDescription(name);
+                currentRental.setName(name);
             }
 
             String desc = rental.getDescription();
@@ -62,6 +60,8 @@ public class RentalController {
             }
 
             Rental modifiedRental = rentalService.saveRental(currentRental);
+
+            System.out.println(modifiedRental);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -74,4 +74,5 @@ public class RentalController {
             return new ResponseEntity<String>("Can't find the requested Rental.", headers, HttpStatus.NOT_FOUND);
         }
     }
+
 }
