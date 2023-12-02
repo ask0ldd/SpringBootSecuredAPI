@@ -59,7 +59,7 @@ public class Restapi2Application implements CommandLineRunner {
 		// "***************\n\n");
 
 		this.createBaseUsers(adminAuthority, userAuthority);
-		// this.createRentals();
+		this.createRentals();
 
 	}
 

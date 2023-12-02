@@ -1,5 +1,8 @@
 package com.example.restapi2.controllers;
 
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.restapi2.dto.ReturnableRentalDto;
 import com.example.restapi2.models.Rental;
 import com.example.restapi2.services.RentalService;
 
@@ -27,8 +31,14 @@ public class RentalController {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            Iterable<Rental> users = rentalService.getRentals();
-            return new ResponseEntity<>(users, headers, HttpStatus.OK); // !!!
+            Iterable<Rental> rentals = rentalService.getRentals();
+            Iterable<ReturnableRentalDto> returnableRentals = StreamSupport.stream(rentals.spliterator(), false)
+                    .map(rental -> {
+                        ReturnableRentalDto returnableRental = new ReturnableRentalDto(rental);
+                        return returnableRental;
+                    })
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(returnableRentals, headers, HttpStatus.OK); // !!!
         } catch (Exception exception) {
             return new ResponseEntity<String>("Can't find any Rental.", HttpStatus.NOT_FOUND);
         }
@@ -38,7 +48,7 @@ public class RentalController {
     public ResponseEntity<?> getUser(@PathVariable("id") final Long id) {
         try {
             Rental rental = rentalService.getRental(id);
-            return new ResponseEntity<>(rental, HttpStatus.OK);
+            return new ResponseEntity<>(new ReturnableRentalDto(rental), HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<String>("Can't find the requested Rental.", HttpStatus.NOT_FOUND);
         }
@@ -66,7 +76,7 @@ public class RentalController {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            return new ResponseEntity<>(modifiedRental, headers,
+            return new ResponseEntity<>(new ReturnableRentalDto(modifiedRental), headers,
                     HttpStatus.OK);
         } catch (Exception exception) {
             HttpHeaders headers = new HttpHeaders();
