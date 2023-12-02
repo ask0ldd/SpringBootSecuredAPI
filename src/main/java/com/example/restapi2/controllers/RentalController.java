@@ -16,7 +16,7 @@ import com.example.restapi2.models.Rental;
 import com.example.restapi2.services.RentalService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "Authorization")
+@CrossOrigin(origins = "http://localhost:5173")
 public class RentalController {
 
     @Autowired

@@ -1,5 +1,6 @@
 package com.example.restapi2;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -72,14 +73,18 @@ public class Restapi2Application implements CommandLineRunner {
 	}
 
 	private void createRentals() {
-		Rental rental1 = Rental.builder().name("name1").rentalId(1L).owner(1L).description("description1")
+		Rental rental1 = Rental.builder().name("name1").rentalId(1L).owner(userService.getUser(1L))
+				.description("description1")
 				.picture("picture1.jpg").surface(31F).price(501F).build();
-		Rental rental2 = Rental.builder().name("name2").rentalId(2L).owner(2L).description("description2")
+		Rental rental2 = Rental.builder().name("name2").rentalId(2L).owner(userService.getUser(2L))
+				.description("description2")
 				.picture("picture2.jpg").surface(32F).price(502F).build();
-		Rental rental3 = Rental.builder().name("name3").rentalId(3L).owner(3L).description("description3")
+		Rental rental3 = Rental.builder().name("name3").rentalId(3L).owner(userService.getUser(1L))
+				.description("description3")
 				.picture("picture3.jpg").surface(33F).price(503F).build();
-		Rental rental1Replacement = Rental.builder().name("name12").rentalId(1L).owner(1L).description("description12")
-				.picture("picture1.jpg").surface(31F).price(501F).build();
+		Rental rental1Replacement = Rental.builder().name("name12").rentalId(1L).owner(userService.getUser(1L))
+				.description("description12")
+				.picture("picture1.jpg").surface(31F).price(501F).creation(new Date()).build();
 
 		rentalService.saveRental(rental1);
 		rentalService.saveRental(rental2);

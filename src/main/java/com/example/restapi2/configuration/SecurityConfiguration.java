@@ -82,8 +82,7 @@ public class SecurityConfiguration {
                             .requestMatchers(new AntPathRequestMatcher("/auth/*")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/users2")).permitAll()
                             .requestMatchers(new AntPathRequestMatcher("/user/*")).permitAll()
-                            // .requestMatchers(new AntPathRequestMatcher("/rental/*",
-                            // "PUT")).hasRole("ADMIN")
+                            .requestMatchers(new AntPathRequestMatcher("/rental/*", "PUT")).hasRole("ADMIN")
                             .anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.restapi2.dto.LoggedUserDto;
 import com.example.restapi2.dto.LoginResponseDto;
 import com.example.restapi2.dto.RegistrationDto;
 import com.example.restapi2.models.User;

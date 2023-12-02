@@ -25,7 +25,7 @@ import com.example.restapi2.services.UserService;
 import com.example.restapi2.services.ValidationService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "Authorization")
+@CrossOrigin(origins = "http://localhost:5173"/* , allowedHeaders = "Authorization" */)
 public class UserController {
 
     @Autowired

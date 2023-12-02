@@ -17,6 +17,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import com.example.restapi2.models.Rental;
+import com.example.restapi2.models.User;
 
 @SpringBootTest(classes = { com.example.restapi2.Restapi2Application.class })
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -29,16 +30,22 @@ public class RentalRepositoryTest {
         private Date date;
         private Rental rental1;
         private Rental rental2;
+        private final User user1 = User.builder().userId(1L).firstname("Laurent").lastname("GINA")
+                        .email("laurentgina@mail.com").password("laurent").build();
+        private final User user2 = User.builder().userId(2L).firstname("Sophie").lastname("FONCEK")
+                        .email("sophiefoncek@mail.com").password("sophie").build();
+        private final User user3 = User.builder().userId(3L).firstname("Agathe").lastname("FEELING")
+                        .email("agathefeeling@mail.com").password("agathe").build();
 
         @BeforeEach
         public void init() {
                 date = new Date();
-                rental1 = new Rental(1L, 1L, "rental name 1", "rental description 1",
+                rental1 = new Rental(1L, user1, "rental name 1", "rental description 1",
                                 "picture url 1", 31F,
                                 301F,
                                 date,
                                 date);
-                rental2 = new Rental(2L, 2L, "rental name 2", "rental description 2",
+                rental2 = new Rental(2L, user2, "rental name 2", "rental description 2",
                                 "picture url 2", 32F,
                                 302F,
                                 date,
@@ -136,7 +143,7 @@ public class RentalRepositoryTest {
                 Assertions.assertThat(collectedRental.get().getSurface()).isEqualTo(rental1.getSurface());
                 Assertions.assertThat(collectedRental.get().getOwner()).isEqualTo(rental1.getOwner());
 
-                Rental rental3 = new Rental(1L, 3L, "rental name 3", "rental description 3",
+                Rental rental3 = new Rental(1L, user3, "rental name 3", "rental description 3",
                                 "picture url 3", 33F,
                                 303F,
                                 date,
