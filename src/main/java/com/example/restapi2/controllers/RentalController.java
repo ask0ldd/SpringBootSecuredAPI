@@ -31,14 +31,8 @@ public class RentalController {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            Iterable<Rental> rentals = rentalService.getRentals();
-            Iterable<ReturnableRentalDto> returnableRentals = StreamSupport.stream(rentals.spliterator(), false)
-                    .map(rental -> {
-                        ReturnableRentalDto returnableRental = new ReturnableRentalDto(rental);
-                        return returnableRental;
-                    })
-                    .collect(Collectors.toList());
-            return new ResponseEntity<>(returnableRentals, headers, HttpStatus.OK); // !!!
+            Iterable<ReturnableRentalDto> rentals = rentalService.getRentalsDto();
+            return new ResponseEntity<>(rentals, headers, HttpStatus.OK); // !!!
         } catch (Exception exception) {
             return new ResponseEntity<String>("Can't find any Rental.", HttpStatus.NOT_FOUND);
         }
@@ -47,8 +41,8 @@ public class RentalController {
     @GetMapping("/rental/{id}")
     public ResponseEntity<?> getUser(@PathVariable("id") final Long id) {
         try {
-            Rental rental = rentalService.getRental(id);
-            return new ResponseEntity<>(new ReturnableRentalDto(rental), HttpStatus.OK);
+            ReturnableRentalDto rental = rentalService.getRentalDto(id);
+            return new ResponseEntity<>(rental, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<String>("Can't find the requested Rental.", HttpStatus.NOT_FOUND);
         }
