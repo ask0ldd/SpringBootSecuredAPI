@@ -63,7 +63,7 @@ public class RentalRepositoryTest {
                 Assertions.assertThat(collectedRental.get()).isNotNull();
                 Assertions.assertThat(collectedRental.get().getRentalId()).isGreaterThan(0);
                 Assertions.assertThat(collectedRental.get().getRentalId()).isEqualTo(rental1.getRentalId());
-                Assertions.assertThat(collectedRental.get().getOwner()).isEqualTo(rental1.getOwner());
+                Assertions.assertThat(collectedRental.get().getOwner().getUserId()).isEqualTo(user1.getUserId());
                 Assertions.assertThat(collectedRental.get().getName()).isEqualTo(rental1.getName());
                 Assertions.assertThat(collectedRental.get().getDescription()).isEqualTo(rental1.getDescription());
                 Assertions.assertThat(collectedRental.get().getPicture()).isEqualTo(rental1.getPicture());
@@ -87,7 +87,8 @@ public class RentalRepositoryTest {
                 Assertions.assertThat(StreamSupport.stream(collectedRentals.spliterator(), false).count()).isEqualTo(2);
                 Assertions.assertThat(collectedRental1).isNotNull();
                 Assertions.assertThat(collectedRental1.getRentalId()).isEqualTo(1L);
-                Assertions.assertThat(collectedRental1.getOwner()).isEqualTo(rental1.getOwner());
+                Assertions.assertThat(collectedRental1.getOwner().getUserId())
+                                .isEqualTo(rental1.getOwner().getUserId());
                 Assertions.assertThat(collectedRental1.getName()).isEqualTo(rental1.getName());
                 Assertions.assertThat(collectedRental1.getDescription()).isEqualTo(rental1.getDescription());
                 Assertions.assertThat(collectedRental1.getPicture()).isEqualTo(rental1.getPicture());
@@ -95,7 +96,8 @@ public class RentalRepositoryTest {
                 Assertions.assertThat(collectedRental1.getPrice()).isEqualTo(rental1.getPrice());
 
                 Assertions.assertThat(collectedRental2.getRentalId()).isEqualTo(2L);
-                Assertions.assertThat(collectedRental2.getOwner()).isEqualTo(rental2.getOwner());
+                Assertions.assertThat(collectedRental2.getOwner().getUserId())
+                                .isEqualTo(rental2.getOwner().getUserId());
                 Assertions.assertThat(collectedRental2.getName()).isEqualTo(rental2.getName());
                 Assertions.assertThat(collectedRental2.getDescription()).isEqualTo(rental2.getDescription());
                 Assertions.assertThat(collectedRental2.getPicture()).isEqualTo(rental2.getPicture());
@@ -115,7 +117,8 @@ public class RentalRepositoryTest {
                 Assertions.assertThat(collectedRental.get().getPicture()).isEqualTo(rental1.getPicture());
                 Assertions.assertThat(collectedRental.get().getPrice()).isEqualTo(rental1.getPrice());
                 Assertions.assertThat(collectedRental.get().getSurface()).isEqualTo(rental1.getSurface());
-                Assertions.assertThat(collectedRental.get().getOwner()).isEqualTo(rental1.getOwner());
+                Assertions.assertThat(collectedRental.get().getOwner().getUserId())
+                                .isEqualTo(rental1.getOwner().getUserId());
         }
 
         @DisplayName("Delete() returns an empty Optional")
@@ -130,7 +133,6 @@ public class RentalRepositoryTest {
         }
 
         @DisplayName("Update() replaces the expected Rental")
-
         @Test
         public void update_ReplaceTheExpectedRental() {
                 rentalRepository.save(rental1);
@@ -141,7 +143,8 @@ public class RentalRepositoryTest {
                 Assertions.assertThat(collectedRental.get().getPicture()).isEqualTo(rental1.getPicture());
                 Assertions.assertThat(collectedRental.get().getPrice()).isEqualTo(rental1.getPrice());
                 Assertions.assertThat(collectedRental.get().getSurface()).isEqualTo(rental1.getSurface());
-                Assertions.assertThat(collectedRental.get().getOwner()).isEqualTo(rental1.getOwner());
+                Assertions.assertThat(collectedRental.get().getOwner().getUserId())
+                                .isEqualTo(rental1.getOwner().getUserId());
 
                 Rental rental3 = new Rental(1L, user3, "rental name 3", "rental description 3",
                                 "picture url 3", 33F,
@@ -157,7 +160,8 @@ public class RentalRepositoryTest {
                 Assertions.assertThat(postUpdateCollectedRental.get().getPicture()).isEqualTo(rental3.getPicture());
                 Assertions.assertThat(postUpdateCollectedRental.get().getPrice()).isEqualTo(rental3.getPrice());
                 Assertions.assertThat(postUpdateCollectedRental.get().getSurface()).isEqualTo(rental3.getSurface());
-                Assertions.assertThat(postUpdateCollectedRental.get().getOwner()).isEqualTo(rental3.getOwner());
+                Assertions.assertThat(postUpdateCollectedRental.get().getOwner().getUserId())
+                                .isEqualTo(rental3.getOwner().getUserId());
 
         }
 }

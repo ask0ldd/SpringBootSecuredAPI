@@ -18,3 +18,34 @@ public interface RentalRepository extends CrudRepository<Rental, Long> {
  * UserDto findUsernameByRentalId(@Param("rentalId") Long rentalId);
  * }
  */
+
+/*
+ * 
+ * // DTO Projection
+ * public class UserDto {
+ * private Long id;
+ * private String username;
+ * // getters and setters
+ * }
+ * 
+ * // Repository
+ * public interface UserRepository extends JpaRepository<User, Long> {
+ * 
+ * @Query("SELECT new com.example.UserDto(u.id, u.username) FROM User u WHERE u.id = :userId"
+ * )
+ * UserDto findUsernameById(@Param("userId") Long userId);
+ * }
+ * 
+ * // Service
+ * 
+ * @Service
+ * public class UserService {
+ * 
+ * @Autowired
+ * private UserRepository userRepository;
+ * 
+ * public UserDto getUsernameById(Long userId) {
+ * return userRepository.findUsernameById(userId);
+ * }
+ * }
+ */

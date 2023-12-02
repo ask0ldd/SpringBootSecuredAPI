@@ -59,7 +59,7 @@ public class Restapi2Application implements CommandLineRunner {
 		// "***************\n\n");
 
 		this.createBaseUsers(adminAuthority, userAuthority);
-		this.createRentals();
+		// this.createRentals();
 
 	}
 
@@ -89,7 +89,6 @@ public class Restapi2Application implements CommandLineRunner {
 		rentalService.saveRental(rental1);
 		rentalService.saveRental(rental2);
 		rentalService.saveRental(rental3);
-		rentalService.saveRental(rental1Replacement);
 	}
 
 }

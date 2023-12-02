@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.stream.StreamSupport;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -95,8 +94,8 @@ public class UserRepositoryTest {
     @DisplayName("FindAll() returns the 5 expected Users")
     @Test
     public void findAll_ReturnFiveSavedUsers() {
-        userRepository.save(user1);
-        userRepository.save(user2);
+        userRepository.save(user4);
+        userRepository.save(user5);
         Iterable<User> users = userRepository.findAll();
         Assertions.assertThat(users).isNotNull();
         Assertions.assertThat(StreamSupport.stream(users.spliterator(), false).count()).isEqualTo(5);
@@ -171,13 +170,6 @@ public class UserRepositoryTest {
         for (GrantedAuthority role : collectedUser.get().getAuthorities()) {
             Assertions.assertThat(role.getAuthority()).isEqualTo("ADMIN");
         }
-
-        /*
-         * User targetUser = new User(4L, "updated firstname1", "updated lastname1",
-         * "updatedemail1@domain.com",
-         * "updated randomPassword1",
-         * roleSet, new Date(), new Date());
-         */
 
         userRepository.save(user4Replacement);
         Optional<User> postUpdateCollectedUser = userRepository.findById(4L);
