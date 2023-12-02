@@ -10,10 +10,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.example.restapi2.models.Message;
 import com.example.restapi2.models.Rental;
 import com.example.restapi2.models.Role;
 import com.example.restapi2.models.User;
 import com.example.restapi2.repositories.RoleRepository;
+import com.example.restapi2.services.MessageService;
 import com.example.restapi2.services.RentalService;
 import com.example.restapi2.services.UserService;
 
@@ -25,6 +27,8 @@ public class Restapi2Application implements CommandLineRunner {
 	private UserService userService;
 	@Autowired
 	private RentalService rentalService;
+	@Autowired
+	private MessageService messageService;
 
 	@Autowired
 	private RoleRepository roleRepository;
@@ -60,6 +64,7 @@ public class Restapi2Application implements CommandLineRunner {
 
 		this.createBaseUsers(adminAuthority, userAuthority);
 		this.createRentals();
+		this.createMessages();
 
 	}
 
@@ -89,6 +94,15 @@ public class Restapi2Application implements CommandLineRunner {
 		rentalService.saveRental(rental1);
 		rentalService.saveRental(rental2);
 		rentalService.saveRental(rental3);
+	}
+
+	private void createMessages() {
+		Message message1 = Message.builder().message("message1").user(userService.getUser(1L))
+				.rental(rentalService.getRental(1L)).build();
+		Message message2 = Message.builder().message("message2").user(userService.getUser(2L))
+				.rental(rentalService.getRental(2L)).build();
+		messageService.saveMessage(message1);
+		messageService.saveMessage(message2);
 	}
 
 }

@@ -7,9 +7,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,11 +34,11 @@ public class Message {
     @Column(name = "message_id")
     private Long messageId;
 
-    @Column(name = "rental_id", nullable = false)
-    private Long rentalId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Rental rental;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User user;
 
     @Column(name = "message", nullable = false, length = 2000)
     private String message;

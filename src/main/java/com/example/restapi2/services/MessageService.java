@@ -26,4 +26,14 @@ public class MessageService {
         return message;
     }
 
+    public Message getReturnableMessage(Long id) {
+        Message message = messageRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Target message can't be found."));
+        return message;
+    }
+
+    public Message saveMessage(Message message) {
+        Message savedMessage = messageRepository.save(message);
+        return savedMessage;
+    }
 }

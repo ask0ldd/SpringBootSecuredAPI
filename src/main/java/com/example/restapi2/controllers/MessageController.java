@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.restapi2.models.Message;
@@ -19,7 +20,7 @@ public class MessageController {
     private MessageService messageService;
 
     @GetMapping("/messages")
-    public ResponseEntity<?> getUsers() {
+    public ResponseEntity<?> getMessages() {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -27,6 +28,16 @@ public class MessageController {
             return new ResponseEntity<>(messages, headers, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<String>("Can't find any Message.", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/message/{id}")
+    public ResponseEntity<?> getMessage(@PathVariable("id") final Long id) {
+        try {
+            Message message = messageService.getMessage(id);
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<String>("Can't find the requested Rental.", HttpStatus.NOT_FOUND);
         }
     }
 }
