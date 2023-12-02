@@ -41,15 +41,7 @@ public class UserController {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            Iterable<User> users = userService.getUsers();
-            Iterable<ReturnableUserDto> returnableUsers = StreamSupport.stream(users.spliterator(), false)
-                    .map(user -> {
-                        ReturnableUserDto returnableUser = new ReturnableUserDto(user);
-                        return returnableUser;
-                    })
-                    .collect(Collectors.toList());
-            System.out.println(returnableUsers.toString());
-
+            Iterable<ReturnableUserDto> returnableUsers = userService.getReturnableUsers();
             return new ResponseEntity<>(returnableUsers, headers, HttpStatus.OK); // !!!
         } catch (Exception exception) {
             return new ResponseEntity<String>("Can't find any User.", HttpStatus.NOT_FOUND);

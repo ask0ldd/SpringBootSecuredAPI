@@ -1,8 +1,5 @@
 package com.example.restapi2.controllers;
 
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,8 +28,8 @@ public class RentalController {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            Iterable<ReturnableRentalDto> rentals = rentalService.getRentalsDto();
-            return new ResponseEntity<>(rentals, headers, HttpStatus.OK); // !!!
+            Iterable<ReturnableRentalDto> rentals = rentalService.getReturnableRentals();
+            return new ResponseEntity<>(rentals, headers, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<String>("Can't find any Rental.", HttpStatus.NOT_FOUND);
         }
@@ -41,7 +38,7 @@ public class RentalController {
     @GetMapping("/rental/{id}")
     public ResponseEntity<?> getUser(@PathVariable("id") final Long id) {
         try {
-            ReturnableRentalDto rental = rentalService.getRentalDto(id);
+            ReturnableRentalDto rental = rentalService.getReturnableRental(id);
             return new ResponseEntity<>(rental, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<String>("Can't find the requested Rental.", HttpStatus.NOT_FOUND);

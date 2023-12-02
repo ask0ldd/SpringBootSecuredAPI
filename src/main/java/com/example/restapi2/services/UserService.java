@@ -1,11 +1,15 @@
 package com.example.restapi2.services;
 
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.example.restapi2.dto.ReturnableUserDto;
 import com.example.restapi2.exceptions.UserNotFoundException;
 import com.example.restapi2.models.User;
 import com.example.restapi2.repositories.UserRepository;
@@ -30,6 +34,12 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    public ReturnableUserDto getReturnableUser(final Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Target user can't be found."));
+        return new ReturnableUserDto(user);
+    }
+
     public User getUserByEmail(final String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("Target user can't be found."));
@@ -41,6 +51,19 @@ public class UserService implements UserDetailsService {
         if (!users.iterator().hasNext())
             throw new UserNotFoundException("No user can be found.");
         return users;
+    }
+
+    public Iterable<ReturnableUserDto> getReturnableUsers() {
+        Iterable<User> users = userRepository.findAll();
+        if (!users.iterator().hasNext())
+            throw new UserNotFoundException("No user can be found.");
+        Iterable<ReturnableUserDto> returnableUsers = StreamSupport.stream(users.spliterator(), false)
+                .map(user -> {
+                    ReturnableUserDto returnableUser = new ReturnableUserDto(user);
+                    return returnableUser;
+                })
+                .collect(Collectors.toList());
+        return returnableUsers;
     }
 
     public void deleteUser(final Long id) {

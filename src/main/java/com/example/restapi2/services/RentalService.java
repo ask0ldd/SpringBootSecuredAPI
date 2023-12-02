@@ -26,7 +26,7 @@ public class RentalService {
         return rental;
     }
 
-    public ReturnableRentalDto getRentalDto(final Long id) {
+    public ReturnableRentalDto getReturnableRental(final Long id) {
         Rental rental = rentalRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Target rental can't be found."));
         return new ReturnableRentalDto(rental);
@@ -39,7 +39,7 @@ public class RentalService {
         return rentals;
     }
 
-    public Iterable<ReturnableRentalDto> getRentalsDto() {
+    public Iterable<ReturnableRentalDto> getReturnableRentals() {
         Iterable<Rental> rentals = rentalRepository.findAll();
         if (!rentals.iterator().hasNext())
             throw new UserNotFoundException("Can't find any Rental.");
