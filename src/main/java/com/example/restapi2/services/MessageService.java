@@ -20,9 +20,10 @@ public class MessageService {
         return messages;
     }
 
-    public Message getMessages(Long id) {
+    public Message getMessage(Long id) {
         Message message = messageRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Target message can't be found."));
         return message;
     }
+
 }
