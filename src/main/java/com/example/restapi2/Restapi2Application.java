@@ -56,7 +56,7 @@ public class Restapi2Application implements CommandLineRunner {
 		Set<Role> adminAuthority = new HashSet<>();
 		adminAuthority.add(adminRole);
 
-		// this.initDB(adminAuthority, userAuthority);
+		this.initDB(adminAuthority, userAuthority);
 
 	}
 
@@ -85,9 +85,6 @@ public class Restapi2Application implements CommandLineRunner {
 		Rental rental3 = Rental.builder().name("name3").rentalId(3L).owner(userService.getUser(1L))
 				.description("description3")
 				.picture("picture3.jpg").surface(33F).price(503F).build();
-		Rental rental1Replacement = Rental.builder().name("name12").rentalId(1L).owner(userService.getUser(1L))
-				.description("description12")
-				.picture("picture1.jpg").surface(31F).price(501F).creation(new Date()).build();
 
 		rentalService.saveRental(rental1);
 		rentalService.saveRental(rental2);

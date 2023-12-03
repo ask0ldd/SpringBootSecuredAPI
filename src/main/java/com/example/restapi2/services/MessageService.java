@@ -1,9 +1,13 @@
 package com.example.restapi2.services;
 
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.restapi2.dto.ReturnableMessageDto;
+import com.example.restapi2.dto.ReturnableUserDto;
 import com.example.restapi2.exceptions.UserNotFoundException;
 import com.example.restapi2.models.Message;
 import com.example.restapi2.repositories.MessageRepository;
@@ -19,6 +23,18 @@ public class MessageService {
         if (!messages.iterator().hasNext())
             throw new UserNotFoundException("No message can be found.");
         return messages;
+    }
+
+    public Iterable<ReturnableMessageDto> getReturnableMessages() {
+        Iterable<Message> messages = messageRepository.findAll();
+        if (!messages.iterator().hasNext())
+            throw new UserNotFoundException("No message can be found.");
+        Iterable<ReturnableMessageDto> returnableMessages = StreamSupport.stream(messages.spliterator(), false)
+                .map(message -> {
+                    return new ReturnableMessageDto(message);
+                })
+                .collect(Collectors.toList());
+        return returnableMessages;
     }
 
     public Message getMessage(Long id) {

@@ -38,30 +38,24 @@ public class MessageRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
-
-    private User user1;
-    private User user2;
     private final Date date = new Date();
     private Rental rental1;
     private Rental rental2;
 
-    @BeforeEach
-    public void contextInit() {
-        Role adminRole = roleRepository.save(new Role("ADMIN"));
-        roleRepository.save(new Role("USER"));
-        Role userRole = roleRepository.findByAuthority("USER").get();
-        Set<Role> userAuthority = new HashSet<>();
-        userAuthority.add(userRole);
-        Set<Role> adminAuthority = new HashSet<>();
-        adminAuthority.add(adminRole);
-        userAuthority.add(userRole);
+    private Set<Role> roleSet = Set.of(new Role(1, "ADMIN"));
+    private final User user1 = User.builder().userId(1L).firstname("Laurent").lastname("GINA")
+            .email("laurentgina@mail.com").password("laurent").authorities(roleSet).creation(date).update(date).build();
+    private final User user2 = User.builder().userId(2L).firstname("Sophie").lastname("FONCEK")
+            .email("sophiefoncek@mail.com").password("sophie").authorities(roleSet).creation(date).update(date).build();
+    private final User user3 = User.builder().userId(3L).firstname("Agathe").lastname("FEELING")
+            .email("agathefeeling@mail.com").password("agathe").authorities(roleSet).creation(date).update(date)
+            .build();
 
-        User user1 = User.builder().userId(1L).firstname("Laurent").lastname("GINA")
-                .email("laurentgina@mail.com").password("laurent").authorities(adminAuthority).build();
-        User user2 = User.builder().userId(2L).firstname("Sophie").lastname("FONCEK")
-                .email("sophiefoncek@mail.com").password("sophie").authorities(userAuthority).build();
+    @BeforeEach
+    public void init() {
+        userRepository.save(user1);
+        userRepository.save(user2);
+        userRepository.save(user3);
 
         rental1 = Rental.builder().rentalId(1L).owner(user1).name("rental name 1")
                 .description("rental description 1").picture("picture url 1").price(301F).surface(31F)
@@ -70,8 +64,6 @@ public class MessageRepositoryTest {
                 .description("rental description 2").picture("picture url 2").price(302F).surface(32F)
                 .creation(date).update(date).build();
 
-        userRepository.save(user1);
-        userRepository.save(user2);
         rentalRepository.save(rental1);
         rentalRepository.save(rental2);
     }
@@ -89,8 +81,8 @@ public class MessageRepositoryTest {
 
         Assertions.assertThat(collectedMessage.get()).isNotNull();
         Assertions.assertThat(collectedMessage.get().getMessageId()).isGreaterThan(0);
-        Assertions.assertThat(collectedMessage.get().getRental()).isEqualTo(rental1);
-        Assertions.assertThat(collectedMessage.get().getUser()).isEqualTo(user1);
+        Assertions.assertThat(collectedMessage.get().getUser().getUserId()).isEqualTo(user1.getUserId());
+        Assertions.assertThat(collectedMessage.get().getRental().getRentalId()).isEqualTo(rental1.getRentalId());
         Assertions.assertThat(collectedMessage.get().getMessage()).isEqualTo("my message");
     }
 
@@ -114,13 +106,13 @@ public class MessageRepositoryTest {
         Assertions.assertThat(StreamSupport.stream(collectedMessages.spliterator(), false).count()).isEqualTo(2);
 
         Assertions.assertThat(collectedMessage1.getMessageId()).isGreaterThan(0);
-        Assertions.assertThat(collectedMessage1.getRental()).isEqualTo(rental1);
-        Assertions.assertThat(collectedMessage1.getUser()).isEqualTo(user1);
+        Assertions.assertThat(collectedMessage1.getRental().getRentalId()).isEqualTo(rental1.getRentalId());
+        Assertions.assertThat(collectedMessage1.getUser().getUserId()).isEqualTo(user1.getUserId());
         Assertions.assertThat(collectedMessage1.getMessage()).isEqualTo("my message 1");
 
         Assertions.assertThat(collectedMessage2.getMessageId()).isGreaterThan(0);
-        Assertions.assertThat(collectedMessage2.getRental()).isEqualTo(rental2);
-        Assertions.assertThat(collectedMessage2.getUser()).isEqualTo(user2);
+        Assertions.assertThat(collectedMessage2.getRental().getRentalId()).isEqualTo(rental2.getRentalId());
+        Assertions.assertThat(collectedMessage2.getUser().getUserId()).isEqualTo(user2.getUserId());
         Assertions.assertThat(collectedMessage2.getMessage()).isEqualTo("my message 2");
     }
 }

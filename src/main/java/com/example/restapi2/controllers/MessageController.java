@@ -27,7 +27,7 @@ public class MessageController {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            Iterable<Message> messages = messageService.getMessages();
+            Iterable<ReturnableMessageDto> messages = messageService.getReturnableMessages();
             return new ResponseEntity<>(messages, headers, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<String>("Can't find any Message.", HttpStatus.NOT_FOUND);

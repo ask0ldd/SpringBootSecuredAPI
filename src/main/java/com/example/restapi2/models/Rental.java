@@ -61,12 +61,6 @@ public class Rental {
     @Column(name = "price")
     private Float price;
 
-    /*
-     * @OneToMany(mappedBy = "pokemon", cascade = CascadeType.ALL, orphanRemoval =
-     * true)
-     * private List<Message> messages = new ArrayList<Message>();
-     */
-
     @CreationTimestamp
     @Column(name = "created_at")
     private Date creation;
@@ -75,3 +69,11 @@ public class Rental {
     @Column(name = "updated_at")
     private Date update;
 }
+
+// cascade all : if a rental row is linked to a user and this user hasn't been
+// created yet then this user is autocreated
+/*
+ * @OneToMany(mappedBy = "pokemon", cascade = CascadeType.ALL, orphanRemoval =
+ * true)
+ * private List<Message> messages = new ArrayList<Message>();
+ */
