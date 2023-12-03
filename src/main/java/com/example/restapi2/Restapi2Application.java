@@ -56,7 +56,7 @@ public class Restapi2Application implements CommandLineRunner {
 		Set<Role> adminAuthority = new HashSet<>();
 		adminAuthority.add(adminRole);
 
-		this.initDB(adminAuthority, userAuthority);
+		// this.initDB(adminAuthority, userAuthority);
 
 	}
 
