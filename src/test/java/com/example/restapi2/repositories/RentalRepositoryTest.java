@@ -3,6 +3,7 @@ package com.example.restapi2.repositories;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 
 import org.assertj.core.api.Assertions;
@@ -17,6 +18,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import com.example.restapi2.models.Rental;
+import com.example.restapi2.models.Role;
 import com.example.restapi2.models.User;
 
 @SpringBootTest(classes = { com.example.restapi2.Restapi2Application.class })
@@ -27,24 +29,35 @@ public class RentalRepositoryTest {
         @Autowired
         private RentalRepository rentalRepository;
 
+        @Autowired
+        private UserRepository userRepository;
+
         private Date date;
         private Rental rental1;
         private Rental rental2;
+        private Rental rental1Replacement;
+        private Set<Role> roleSet = Set.of(new Role(1, "ADMIN"));
         private final User user1 = User.builder().userId(1L).firstname("Laurent").lastname("GINA")
-                        .email("laurentgina@mail.com").password("laurent").build();
+                        .email("laurentgina@mail.com").password("laurent").authorities(roleSet).build();
         private final User user2 = User.builder().userId(2L).firstname("Sophie").lastname("FONCEK")
-                        .email("sophiefoncek@mail.com").password("sophie").build();
+                        .email("sophiefoncek@mail.com").password("sophie").authorities(roleSet).build();
         private final User user3 = User.builder().userId(3L).firstname("Agathe").lastname("FEELING")
-                        .email("agathefeeling@mail.com").password("agathe").build();
+                        .email("agathefeeling@mail.com").password("agathe").authorities(roleSet).build();
 
         @BeforeEach
         public void init() {
+                userRepository.save(user1);
+                userRepository.save(user2);
+                userRepository.save(user3);
                 date = new Date();
                 rental1 = Rental.builder().rentalId(1L).owner(user1).name("rental name 1")
                                 .description("rental description 1").picture("picture url 1").price(301F).surface(31F)
                                 .creation(date).update(date).build();
                 rental2 = Rental.builder().rentalId(2L).owner(user2).name("rental name 2")
                                 .description("rental description 2").picture("picture url 2").price(302F).surface(32F)
+                                .creation(date).update(date).build();
+                rental1Replacement = Rental.builder().rentalId(1L).owner(user3).name("rental name 3")
+                                .description("rental description 3").picture("picture url 3").price(303F).surface(33F)
                                 .creation(date).update(date).build();
         }
 
@@ -142,21 +155,21 @@ public class RentalRepositoryTest {
                 Assertions.assertThat(collectedRental.get().getOwner().getUserId())
                                 .isEqualTo(rental1.getOwner().getUserId());
 
-                Rental rental3 = Rental.builder().rentalId(1L).owner(user3).name("rental name 3")
-                                .description("rental description 3").picture("picture url 3").price(303F).surface(33F)
-                                .creation(date).update(date).build();
-
-                rentalRepository.save(rental3);
+                rentalRepository.save(rental1Replacement);
                 Optional<Rental> postUpdateCollectedRental = rentalRepository.findById(1L);
                 Assertions.assertThat(postUpdateCollectedRental.get().getRentalId()).isGreaterThan(0);
-                Assertions.assertThat(postUpdateCollectedRental.get().getName()).isEqualTo(rental3.getName());
+                Assertions.assertThat(postUpdateCollectedRental.get().getName())
+                                .isEqualTo(rental1Replacement.getName());
                 Assertions.assertThat(postUpdateCollectedRental.get().getDescription())
-                                .isEqualTo(rental3.getDescription());
-                Assertions.assertThat(postUpdateCollectedRental.get().getPicture()).isEqualTo(rental3.getPicture());
-                Assertions.assertThat(postUpdateCollectedRental.get().getPrice()).isEqualTo(rental3.getPrice());
-                Assertions.assertThat(postUpdateCollectedRental.get().getSurface()).isEqualTo(rental3.getSurface());
+                                .isEqualTo(rental1Replacement.getDescription());
+                Assertions.assertThat(postUpdateCollectedRental.get().getPicture())
+                                .isEqualTo(rental1Replacement.getPicture());
+                Assertions.assertThat(postUpdateCollectedRental.get().getPrice())
+                                .isEqualTo(rental1Replacement.getPrice());
+                Assertions.assertThat(postUpdateCollectedRental.get().getSurface())
+                                .isEqualTo(rental1Replacement.getSurface());
                 Assertions.assertThat(postUpdateCollectedRental.get().getOwner().getUserId())
-                                .isEqualTo(rental3.getOwner().getUserId());
+                                .isEqualTo(rental1Replacement.getOwner().getUserId());
 
         }
 }
