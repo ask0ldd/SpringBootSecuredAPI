@@ -53,18 +53,12 @@ public class Restapi2Application implements CommandLineRunner {
 		Set<Role> userAuthority = new HashSet<>();
 		userAuthority.add(userRole);
 
-		// System.out.println("\n\n***************" + userRole.getAuthority() +
-		// "***************\n\n");
-
 		Set<Role> adminAuthority = new HashSet<>();
 		adminAuthority.add(adminRole);
 
-		// System.out.println("\n\n***************" + adminRole.getAuthority() +
-		// "***************\n\n");
-
-		// this.createBaseUsers(adminAuthority, userAuthority);
-		// this.createRentals();
-		// this.createMessages();
+		this.createBaseUsers(adminAuthority, userAuthority);
+		this.createRentals();
+		this.createMessages();
 
 	}
 

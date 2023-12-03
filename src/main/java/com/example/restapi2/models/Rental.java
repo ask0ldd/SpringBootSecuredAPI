@@ -1,6 +1,7 @@
 package com.example.restapi2.models;
 
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,7 +12,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +38,9 @@ public class Rental {
     private Long rentalId;
 
     // @Column(name = "owner_id", nullable = false)
-    @ManyToOne(fetch = FetchType.EAGER)
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
     @Column(name = "name", nullable = false, length = 255)
@@ -46,6 +51,9 @@ public class Rental {
 
     @Column(name = "picture", length = 255)
     private String picture;
+
+    @OneToMany(mappedBy = "rental_id")
+    private List<Message> messages;
 
     @Column(name = "surface")
     private Float surface;
