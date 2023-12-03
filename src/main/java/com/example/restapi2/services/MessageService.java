@@ -3,6 +3,7 @@ package com.example.restapi2.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.restapi2.dto.ReturnableMessageDto;
 import com.example.restapi2.exceptions.UserNotFoundException;
 import com.example.restapi2.models.Message;
 import com.example.restapi2.repositories.MessageRepository;
@@ -26,10 +27,10 @@ public class MessageService {
         return message;
     }
 
-    public Message getReturnableMessage(Long id) {
+    public ReturnableMessageDto getReturnableMessage(Long id) {
         Message message = messageRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Target message can't be found."));
-        return message;
+        return new ReturnableMessageDto(message);
     }
 
     public Message saveMessage(Message message) {

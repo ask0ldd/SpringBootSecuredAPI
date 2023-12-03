@@ -19,13 +19,12 @@ public class ReturnableRentalDto {
     private Float price;
 
     public ReturnableRentalDto(Rental rental) {
-        rentalId = rental.getRentalId();
-        description = rental.getDescription();
-        name = rental.getName();
-        picture = rental.getPicture();
-        surface = rental.getSurface();
-        price = rental.getPrice();
-        owner = new ReturnableUserDto(rental.getOwner());
+        this.rentalId = rental.getRentalId();
+        this.description = rental.getDescription();
+        this.name = rental.getName();
+        this.picture = rental.getPicture();
+        this.surface = rental.getSurface();
+        this.price = rental.getPrice();
+        this.owner = new ReturnableUserDto(rental.getOwner());
     }
-
 }

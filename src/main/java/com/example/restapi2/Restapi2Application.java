@@ -99,7 +99,7 @@ public class Restapi2Application implements CommandLineRunner {
 	private void createMessages() {
 		Message message1 = Message.builder().message("message1").user(userService.getUser(1L))
 				.rental(rentalService.getRental(1L)).build();
-		Message message2 = Message.builder().message("message2").user(userService.getUser(2L))
+		Message message2 = Message.builder().message("message2").user(userService.getUser(3L))
 				.rental(rentalService.getRental(2L)).build();
 		messageService.saveMessage(message1);
 		messageService.saveMessage(message2);
