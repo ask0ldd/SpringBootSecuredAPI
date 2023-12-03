@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,12 +46,22 @@ public class MessageController {
     }
 
     @PostMapping("/message")
-    public ResponseEntity<?> createUser(@RequestBody Message message) {
+    public ResponseEntity<?> createMessage(@RequestBody Message message) {
         try {
             Message createdMessage = messageService.saveMessage(message);
             return new ResponseEntity<>(new ReturnableMessageDto(createdMessage), HttpStatus.CREATED);
         } catch (Exception exception) {
             return new ResponseEntity<>("Can't create the target Message.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/message/{id}")
+    public ResponseEntity<?> deleteMessage(@PathVariable("id") final Long id) {
+        try {
+            messageService.deleteMessage(id);
+            return new ResponseEntity<String>("Message deleted.", HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<String>("Can't find the requested Message.", HttpStatus.NOT_FOUND);
         }
     }
 }
