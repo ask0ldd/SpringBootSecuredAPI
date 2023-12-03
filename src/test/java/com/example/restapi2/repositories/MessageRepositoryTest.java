@@ -63,10 +63,12 @@ public class MessageRepositoryTest {
         User user2 = User.builder().userId(2L).firstname("Sophie").lastname("FONCEK")
                 .email("sophiefoncek@mail.com").password("sophie").authorities(userAuthority).build();
 
-        Rental rental1 = new Rental(1L, user1, "rental name 1", "rental description 1",
-                "picture url 1", 31F, 301F, date, date);
-        Rental rental2 = new Rental(2L, user2, "rental name 2", "rental description 2",
-                "picture url 2", 32F, 302F, date, date);
+        rental1 = Rental.builder().rentalId(1L).owner(user1).name("rental name 1")
+                .description("rental description 1").picture("picture url 1").price(301F).surface(31F)
+                .creation(date).update(date).build();
+        rental2 = Rental.builder().rentalId(2L).owner(user2).name("rental name 2")
+                .description("rental description 2").picture("picture url 2").price(302F).surface(32F)
+                .creation(date).update(date).build();
 
         userRepository.save(user1);
         userRepository.save(user2);
@@ -77,7 +79,9 @@ public class MessageRepositoryTest {
     @Test
     @DisplayName("Save() saves one Message into DB.")
     public void SaveMessage() {
-        Message message = new Message(1L, rental1, user1, "my message", date, date);
+
+        Message message = Message.builder().messageId(1L).rental(rental1).user(user1).message("my message")
+                .creation(date).update(date).build();
 
         messageRepository.save(message);
 
@@ -93,8 +97,10 @@ public class MessageRepositoryTest {
     @Test
     @DisplayName("FindAll() returns the 2 expected Messages.")
     public void FindAllMessages() {
-        Message message1 = new Message(1L, rental1, user1, "my message 1", date, date);
-        Message message2 = new Message(2L, rental2, user2, "my message 2", date, date);
+        Message message1 = Message.builder().messageId(1L).rental(rental1).user(user1).message("my message 1")
+                .creation(date).update(date).build();
+        Message message2 = Message.builder().messageId(2L).rental(rental2).user(user2).message("my message 2")
+                .creation(date).update(date).build();
 
         messageRepository.save(message1);
         messageRepository.save(message2);

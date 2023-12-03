@@ -40,16 +40,12 @@ public class RentalRepositoryTest {
         @BeforeEach
         public void init() {
                 date = new Date();
-                rental1 = new Rental(1L, user1, "rental name 1", "rental description 1",
-                                "picture url 1", 31F,
-                                301F,
-                                date,
-                                date);
-                rental2 = new Rental(2L, user2, "rental name 2", "rental description 2",
-                                "picture url 2", 32F,
-                                302F,
-                                date,
-                                date);
+                rental1 = Rental.builder().rentalId(1L).owner(user1).name("rental name 1")
+                                .description("rental description 1").picture("picture url 1").price(301F).surface(31F)
+                                .creation(date).update(date).build();
+                rental2 = Rental.builder().rentalId(2L).owner(user2).name("rental name 2")
+                                .description("rental description 2").picture("picture url 2").price(302F).surface(32F)
+                                .creation(date).update(date).build();
         }
 
         @DisplayName("Save() saves one Rental into DB.")
@@ -146,11 +142,10 @@ public class RentalRepositoryTest {
                 Assertions.assertThat(collectedRental.get().getOwner().getUserId())
                                 .isEqualTo(rental1.getOwner().getUserId());
 
-                Rental rental3 = new Rental(1L, user3, "rental name 3", "rental description 3",
-                                "picture url 3", 33F,
-                                303F,
-                                date,
-                                date);
+                Rental rental3 = Rental.builder().rentalId(1L).owner(user3).name("rental name 3")
+                                .description("rental description 3").picture("picture url 3").price(303F).surface(33F)
+                                .creation(date).update(date).build();
+
                 rentalRepository.save(rental3);
                 Optional<Rental> postUpdateCollectedRental = rentalRepository.findById(1L);
                 Assertions.assertThat(postUpdateCollectedRental.get().getRentalId()).isGreaterThan(0);

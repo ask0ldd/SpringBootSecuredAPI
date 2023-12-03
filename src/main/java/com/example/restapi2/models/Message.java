@@ -35,6 +35,9 @@ public class Message {
     @Column(name = "message_id")
     private Long messageId;
 
+    @Column(name = "message", nullable = false, length = 2000)
+    private String message;
+
     @ManyToOne
     @JoinColumn(name = "rental_id", nullable = false)
     private Rental rental;
@@ -42,9 +45,6 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    @Column(name = "message", nullable = false, length = 2000)
-    private String message;
 
     @CreationTimestamp
     @Column(name = "created_at")

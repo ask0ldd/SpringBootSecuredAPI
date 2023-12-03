@@ -56,10 +56,14 @@ public class Restapi2Application implements CommandLineRunner {
 		Set<Role> adminAuthority = new HashSet<>();
 		adminAuthority.add(adminRole);
 
+		this.initDB(adminAuthority, userAuthority);
+
+	}
+
+	private void initDB(Set<Role> adminAuthority, Set<Role> userAuthority) {
 		this.createBaseUsers(adminAuthority, userAuthority);
 		this.createRentals();
 		this.createMessages();
-
 	}
 
 	private void createBaseUsers(Set<Role> adminAuthority, Set<Role> userAuthority) {

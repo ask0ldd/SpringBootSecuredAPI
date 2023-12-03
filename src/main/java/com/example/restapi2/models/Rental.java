@@ -52,7 +52,7 @@ public class Rental {
     @Column(name = "picture", length = 255)
     private String picture;
 
-    @OneToMany(mappedBy = "rental_id")
+    @OneToMany(mappedBy = "rental")
     private List<Message> messages;
 
     @Column(name = "surface")
