@@ -1,10 +1,13 @@
 package com.example.restapi2.repositories;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import com.example.restapi2.models.Message;
+import com.example.restapi2.models.Rental;
+import com.example.restapi2.models.User;
 
 @SpringBootTest(classes = { com.example.restapi2.Restapi2Application.class })
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -24,10 +29,40 @@ public class MessageRepositoryTest {
     @Autowired
     private MessageRepository messageRepository;
 
+    @Autowired
+    private RentalRepository rentalRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    private final User user1 = User.builder().userId(1L).firstname("Laurent").lastname("GINA")
+            .email("laurentgina@mail.com").password("laurent").build();
+    private final User user2 = User.builder().userId(2L).firstname("Sophie").lastname("FONCEK")
+            .email("sophiefoncek@mail.com").password("sophie").build();
+    private final Date date = new Date();
+    private final Rental rental1 = new Rental(1L, user1, "rental name 1", "rental description 1",
+            "picture url 1", 31F,
+            301F,
+            date,
+            date);
+    private final Rental rental2 = new Rental(2L, user2, "rental name 2", "rental description 2",
+            "picture url 2", 32F,
+            302F,
+            date,
+            date);
+
+    @BeforeEach
+    public void contextInit() {
+        userRepository.save(user1);
+        userRepository.save(user2);
+        rentalRepository.save(rental1);
+        rentalRepository.save(rental2);
+    }
+
     @Test
     @DisplayName("Save() saves one Message into DB.")
     public void SaveMessage() {
-        Message message = new Message(1L, 1L, 2L, "my message", null, null);
+        Message message = new Message(1L, rental1, user1, "my message", null, null);
 
         messageRepository.save(message);
 
@@ -35,16 +70,16 @@ public class MessageRepositoryTest {
 
         Assertions.assertThat(collectedMessage.get()).isNotNull();
         Assertions.assertThat(collectedMessage.get().getMessageId()).isGreaterThan(0);
-        Assertions.assertThat(collectedMessage.get().getRentalId()).isEqualTo(1L);
-        Assertions.assertThat(collectedMessage.get().getUserId()).isEqualTo(2L);
+        Assertions.assertThat(collectedMessage.get().getRental()).isEqualTo(rental1);
+        Assertions.assertThat(collectedMessage.get().getUser()).isEqualTo(user1);
         Assertions.assertThat(collectedMessage.get().getMessage()).isEqualTo("my message");
     }
 
     @Test
     @DisplayName("FindAll() returns the 2 expected Messages.")
     public void FindAllMessages() {
-        Message message1 = new Message(1L, 1L, 3L, "my message 1", null, null);
-        Message message2 = new Message(2L, 2L, 4L, "my message 2", null, null);
+        Message message1 = new Message(1L, rental1, user1, "my message 1", null, null);
+        Message message2 = new Message(2L, rental2, user2, "my message 2", null, null);
 
         messageRepository.save(message1);
         messageRepository.save(message2);
@@ -58,13 +93,13 @@ public class MessageRepositoryTest {
         Assertions.assertThat(StreamSupport.stream(collectedMessages.spliterator(), false).count()).isEqualTo(2);
 
         Assertions.assertThat(collectedMessage1.getMessageId()).isGreaterThan(0);
-        Assertions.assertThat(collectedMessage1.getRentalId()).isEqualTo(1L);
-        Assertions.assertThat(collectedMessage1.getUserId()).isEqualTo(3L);
+        Assertions.assertThat(collectedMessage1.getRental()).isEqualTo(rental1);
+        Assertions.assertThat(collectedMessage1.getUser()).isEqualTo(user1);
         Assertions.assertThat(collectedMessage1.getMessage()).isEqualTo("my message 1");
 
         Assertions.assertThat(collectedMessage2.getMessageId()).isGreaterThan(0);
-        Assertions.assertThat(collectedMessage2.getRentalId()).isEqualTo(2L);
-        Assertions.assertThat(collectedMessage2.getUserId()).isEqualTo(4L);
+        Assertions.assertThat(collectedMessage2.getRental()).isEqualTo(rental2);
+        Assertions.assertThat(collectedMessage2.getUser()).isEqualTo(user2);
         Assertions.assertThat(collectedMessage2.getMessage()).isEqualTo("my message 2");
     }
 }
