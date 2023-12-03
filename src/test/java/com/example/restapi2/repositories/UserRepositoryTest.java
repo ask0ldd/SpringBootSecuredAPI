@@ -3,7 +3,6 @@ package com.example.restapi2.repositories;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
-import java.util.Date;
 // import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.Set;
 import java.util.stream.StreamSupport;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -43,12 +41,8 @@ public class UserRepositoryTest {
             .email("sophiefoncek@mail.com").password("sophie").authorities(roleSet).build();
     private final User user3 = User.builder().userId(3L).firstname("Agathe").lastname("FEELING")
             .email("agathefeeling@mail.com").password("agathe").authorities(roleSet).build();
-    private final User user6Invalid = User.builder().userId(6L).firstname("firstname2").lastname("lastname2")
-            .email("laurentgina@mail.com").password("randomPassword2").authorities(roleSet).creation(new Date())
-            .update(new Date()).build();
-    private final User user4Invalid = User.builder().userId(4L).firstname("firstname2").lastname("lastname2")
-            .email("laurentgina@mail.com").password("randomPassword2").authorities(roleSet).creation(new Date())
-            .update(new Date()).build();
+    private final User user2Invalid = User.builder().userId(2L).firstname("Sophie").lastname("FONCEK")
+            .email("laurentgina@mail.com").password("sophie").authorities(roleSet).build();
     private final User user1Replacement = User.builder().userId(1L).firstname("LaurentReplacement")
             .lastname("GINAReplacement")
             .email("laurentgina.replacement@mail.com").password("laurent").authorities(roleSet).build();
@@ -167,16 +161,17 @@ public class UserRepositoryTest {
     @Test
     public void update_ThrowsException() {
         userRepository.save(user1);
-        Optional<User> collectedUser = userRepository.findById(1L);
+        userRepository.save(user2);
+        Optional<User> collectedUser = userRepository.findById(2L);
         Assertions.assertThat(collectedUser.isPresent()).isTrue();
         Assertions.assertThat(collectedUser.get().getUserId()).isGreaterThan(0);
-        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user4.getFirstname());
-        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user4.getLastname());
-        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo(user4.getPassword());
-        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo(user4.getEmail());
+        Assertions.assertThat(collectedUser.get().getFirstname()).isEqualTo(user2.getFirstname());
+        Assertions.assertThat(collectedUser.get().getLastname()).isEqualTo(user2.getLastname());
+        Assertions.assertThat(collectedUser.get().getPassword()).isEqualTo(user2.getPassword());
+        Assertions.assertThat(collectedUser.get().getEmail()).isEqualTo(user2.getEmail());
 
         Exception exception = assertThrows(DataIntegrityViolationException.class, () -> {
-            userRepository.save(user4Invalid);
+            userRepository.save(user2Invalid);
         });
 
         Assertions.assertThat(exception.getMessage()).contains("Unique index or primary key violation");
